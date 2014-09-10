@@ -7,4 +7,4 @@ class DetalleInline(admin.StackedInline):
 	model = Detalle
 	extra = 1
 
-admin.site.register(Factura)
+# admin.site.register(Factura)
