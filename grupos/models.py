@@ -5,8 +5,8 @@ class Grupo(models.Model):
 
 	class Meta:
 		# app_label = "Grupo"
-		verbose_name = "Group"
-		verbose_name_plural = "Groups"
+		verbose_name = "Grupo"
+		verbose_name_plural = "Grupos"
 
 	def __unicode__(self):
 		return self.descripcion_grupo
