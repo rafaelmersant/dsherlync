@@ -45,7 +45,6 @@ INSTALLED_APPS = (
     'clasificaciones',
     'grupos',
     'inventarios',
-    'detalles',
 )
 
 MIDDLEWARE_CLASSES = (
