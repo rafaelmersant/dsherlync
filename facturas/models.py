@@ -1,7 +1,6 @@
 from django.db import models
 
 from productos.models import Producto
-from detalles.models import Detalle
 
 class Factura(models.Model):
 	facturas_choices = (('A','Activa'),('I','Inactiva'),)
@@ -11,4 +10,14 @@ class Factura(models.Model):
 	fecha = models.DateTimeField(auto_now_add=True)
 	estatus = models.CharField(max_length=1, choices=facturas_choices)
 	impresa = models.CharField(max_length=1, choices=facturas_impresa)
-	detalle = models.ForeignKey(Detalle)
+
+class Detalle(models.Model):
+	
+	producto = models.ForeignKey(Producto)
+	descuento = models.IntegerField(blank=True)
+	cantidad = models.PositiveIntegerField()
+	precio = models.PositiveIntegerField()
+	factura = models.ForeignKey(Factura)
+
+	def __unicode__(self):
+		return u"%s %s" % (self.producto, (self.cantidad * self.precio))
