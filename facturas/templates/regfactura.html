@@ -3,17 +3,32 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Facturacion</title>
+	<link rel="stylesheet" type="text/css" href="../static/normalize.css">
+	<link rel="stylesheet" href="../static/estilos.css">
 </head>
 <body>
-	<header>
-		<figure>
-			<img src="/static/logo.png" alt="Logo" />
-		
+	<div class="SepHeader">
+	<header class="HeaderPag">
+		<figure class="LogoPag">
+			<img class="LogoImg" src="../static/Logo.png" alt="Logo" />		
 		</figure>	
+		<p class="TitleSystem"> Sistema de Facturacion para D Sherlyn Closet </p>
 	</header>
+	</div>
+		<div class="divMenu">
+		<nav class="Menu">
+			<ul class="UlMenu">
+				<li> <a class="clsFacturar" href="#">Facturar</a></li>
+				<li> <a class="clsAdministrar" href="">Administrar </a></li>
+			</ul>
+		</nav>
+		</div>
 
 	<section>
+		<label for="producto">Producto:</label>
+		<input type="text" name="producto" class="TextClass" PlaceHolder="Producto" />
 		
+		<article>Nombre:</article>
 	</section>	
 </body>
 </html>
