@@ -12,23 +12,64 @@
 		<figure class="LogoPag">
 			<img class="LogoImg" src="../static/Logo.png" alt="Logo" />		
 		</figure>	
-		<p class="TitleSystem"> Sistema de Facturacion para D Sherlyn Closet </p>
+		<p class="TitleSystem"> Sistema de Facturacion para D' Sherlyn Closet </p>
 	</header>
 	</div>
-		<div class="divMenu">
 		<nav class="Menu">
 			<ul class="UlMenu">
 				<li> <a class="clsFacturar" href="#">Facturar</a></li>
 				<li> <a class="clsAdministrar" href="">Administrar </a></li>
 			</ul>
 		</nav>
-		</div>
 
-	<section>
+	<section class="secFactura">
+		
 		<label for="producto">Producto:</label>
 		<input type="text" name="producto" class="TextClass" PlaceHolder="Producto" />
-		
-		<article>Nombre:</article>
+		<a href="#" class="AddItem" id="btAdd">Agregar</a>
 	</section>	
+	<section class="secDetalle">
+		<article class="Item">
+			<table class="tableItem" id="Items">
+				<tr class="HeaderItem">
+					<td class="CellItemHeader">
+					Cod. Prod.						
+					</td>
+					<td class="CellItemHeader">
+					Descripción
+					</td>
+					<td class="CellItemHeader">
+					Cant.						
+					</td>
+					<td class="CellItemHeader">
+					Precio						
+					</td>
+					<td class="CellItemHeader">
+					Desc.						
+					</td>
+					<td class="CellItemHeader">
+					Importe						
+					</td>
+				</tr>
+				<tr class="DetailsItem" id="idItem">
+					<td class="CellItemDetail dCod"> xxxx</td>
+					<td class="CellItemDetail dDescrp"> xxxxxxxxxxxxxxxxxxxxxxxx</td>
+					<td class="CellItemDetail dCant"> xxxxxx</td>
+					<td class="CellItemDetail dPrecio"> xxxxxx</td>
+					<td class="CellItemDetail dDesc"> xxxxx</td>
+					<td class="CellItemDetail dImporte"> xxxxxxx</td>
+				</tr>
+				
+			</table>
+		</article>
+	</section>
+
+	<footer>
+		
+	</footer>
+
+	<script src="../static/jquery-1.11.1.js" type="text/javascript"> </script>
+	<script src="../static/regFact.js" type="text/javascript"> </script>
+
 </body>
 </html>
