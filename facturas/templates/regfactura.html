@@ -5,6 +5,7 @@
 	<title>Facturacion</title>
 	<link rel="stylesheet" type="text/css" href="../static/normalize.css">
 	<link rel="stylesheet" href="../static/estilos.css">
+	<link rel="stylesheet" href="../static/iconfonts.css">
 </head>
 <body>
 	<div class="SepHeader">
@@ -12,7 +13,7 @@
 		<figure class="LogoPag">
 			<img class="LogoImg" src="../static/Logo.png" alt="Logo" />		
 		</figure>	
-		<p class="TitleSystem"> Sistema de Facturacion para D' Sherlyn Closet </p>
+		<p class="TitleSystem"> Sistema de Facturación para D' Sherlyn Closet </p>
 	</header>
 	</div>
 		<nav class="Menu">
@@ -25,7 +26,7 @@
 	<section class="secFactura">
 		
 		<label for="producto">Producto:</label>
-		<input type="text" name="producto" class="TextClass" PlaceHolder="Producto" />
+		<input type="text" name="producto" class="ProductDescrp TextBoxes icon-search" PlaceHolder="Buscar Producto" id="iProd" />
 		<a href="#" class="AddItem" id="btAdd">Agregar</a>
 	</section>	
 	<section class="secDetalle">
@@ -54,13 +55,28 @@
 				<tr class="DetailsItem" id="idItem">
 					<td class="CellItemDetail dCod"> xxxx</td>
 					<td class="CellItemDetail dDescrp"> xxxxxxxxxxxxxxxxxxxxxxxx</td>
-					<td class="CellItemDetail dCant"> xxxxxx</td>
-					<td class="CellItemDetail dPrecio"> xxxxxx</td>
-					<td class="CellItemDetail dDesc"> xxxxx</td>
-					<td class="CellItemDetail dImporte"> xxxxxxx</td>
+					<td class="CellItemDetail dCant"> <input name="cant" type="text" class="TextBoxes TextItems" PlaceHolder="0.00"/> </td>
+					<td class="CellItemDetail dPrecio"> <input name="cant" type="text" class="TextBoxes TextItems" PlaceHolder="0.00"/></td>
+					<td class="CellItemDetail dDesc"> <input name="cant" type="text" class="TextBoxes TextItems" PlaceHolder="0.00"/> </td>
+					<td class="CellItemDetail dImporte"> <input name="cant" type="text" class="TextBoxes TextItems" PlaceHolder="0.00"/> </td>
 				</tr>
 				
 			</table>
+			<table class="Totals">
+				<tr>
+					<td> Total: </td>
+					<td> <p class="Totals">12,000.52 </p></td>
+				</tr>
+				<tr>
+					<td>Pago:</td>
+					<td> <p class="Totals">12,000.52 </p></td>
+				</tr>
+				<tr>
+					<td>Cambio:</td>
+					<td> <p class="Totals">12,000.52 </p></td>
+				</tr>
+			</table>
+			<a href="#" class="AddItem">Imprimir </a>
 		</article>
 	</section>
 

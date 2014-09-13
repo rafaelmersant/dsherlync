@@ -9,5 +9,6 @@ $('#btAdd').click(function(){
 	$content.append(clone);
 
 	clone.fadeIn();
-	// $('#Items').prepend($('#idItem'));
 });
+
+// $('#idProd')
