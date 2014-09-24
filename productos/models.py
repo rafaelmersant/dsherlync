@@ -2,6 +2,7 @@ from django.db import models
 
 from grupos.models import Grupo
 from clasificaciones.models import Clasificacion
+from departamentos.models import Departamento
 
 class Producto(models.Model):
 	codigo = models.CharField(max_length=10)
@@ -10,6 +11,7 @@ class Producto(models.Model):
 
 	grupo = models.ForeignKey(Grupo)
 	clasificacion = models.ForeignKey(Clasificacion)
+	departamento = models.ForeignKey(Departamento)
 
 	def __unicode__(self):
-		return self.descripcion
+		return "%s" % self.descripcion
