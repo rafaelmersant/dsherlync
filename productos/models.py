@@ -9,7 +9,7 @@ class Producto(models.Model):
 	descripcion = models.CharField(max_length=150)
 	precio = models.DecimalField(max_digits=12, decimal_places=2)
 
-	grupo = models.ForeignKey(Grupo)
+	grupo = models.ForeignKey(Grupo, related_name='grupos_rel')
 	clasificacion = models.ForeignKey(Clasificacion)
 	departamento = models.ForeignKey(Departamento)
 

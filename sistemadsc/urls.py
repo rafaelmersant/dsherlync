@@ -21,8 +21,10 @@ urlpatterns = patterns('',
 
     #API
     url(r'^api/productos/$', ProductoListView.as_view()),
-    url(r'^api/grupos/$', GrupoListView.as_view()),
     url(r'^api/productos/(?P<descrp>\w+)/$', ProductoListView.as_view()),
+
+    url(r'^api/grupos/$', GrupoListView.as_view()),
+    url(r'^api/grupos/(?P<pk>\w+)/$', GrupoListView.as_view()),
 )
 
 urlpatterns = format_suffix_patterns(urlpatterns)

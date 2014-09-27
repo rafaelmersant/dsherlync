@@ -4,6 +4,20 @@ body{
 	margin: 0;
 	padding: 0;
 }
+
+.MUJER{
+	background: pink;
+}
+.HOMBRE{
+	background: blue;
+}
+.ELISAFASHIONS{
+	background: green;
+}
+#productosajax{
+	margin: 0.3em 0 0 6em;
+}
+
 .Apartados{
 	display: none;
 }
@@ -230,3 +244,4 @@ body{
 .AddItemCte{
 	margin: 0 0 0 0.2em;
 }
+
