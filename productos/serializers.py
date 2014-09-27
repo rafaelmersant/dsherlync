@@ -1,10 +1,8 @@
 from .models import Producto
+from grupos.models import Grupo
+from clasificaciones.models import Clasificacion
 
 from rest_framework import serializers
-
-from django.http import Http404
-from rest_framework.views import APIView
-from rest_framework.response import Response
 
 class ProductoSerializer(serializers.ModelSerializer):
 	class Meta:
@@ -16,3 +14,7 @@ class ProductoSerializer(serializers.ModelSerializer):
 			'departamento'
 			)
 
+class GrupoSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = Grupo
+		fields = ('id','descripcion_grupo',)
