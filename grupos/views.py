@@ -1,22 +1,21 @@
 from django.shortcuts import render
+
 from .models import Grupo
-from django.http import HttpResponse
-import json
+from productos.serializers import GrupoSerializer
 
-
-from django.http import Http404
 from rest_framework.views import APIView
-from rest_framework.response import Response
 
 
-class GrupoList(APIView):
+class GrupoListView(APIView):
+	
+	serialized_grupos = GrupoSerializer
 
-	def get(self, request, format=None):
-		grupos = Grupo.objects.all()
-
-		# response = self.serialized_producto(productos,many=True)
-		# return Response(dumps(grupos))
-
-		return HttpResponse(json.dumps(grupos), content_type="application/json")
-
-grupos_view = GrupoList.as_view()
+	def get(self, request, pk, format=None):
+		if pk != None:
+			grupos = Grupo.objects.get(pk=pk)
+			many=False	
+		else:
+			grupos = Grupo.objects.all()
+			many=True
+		response = self.serialized_grupos(grupos,many=many)
+		return Response(response.data)
