@@ -6,16 +6,46 @@ body{
 }
 
 .MUJER{
-	background: pink;
+	background: #ff99ff;
 }
 .HOMBRE{
-	background: blue;
+	background: #6699ff;
 }
 .ELISAFASHIONS{
-	background: green;
+	background: #99cc33;
 }
+.VITRINA{
+	background: #AAAAAA;
+}
+.NIÑO{
+	background: #ffcc00;
+}
+
 #productosajax{
 	margin: 0.3em 0 0 6em;
+	position: absolute;
+	width: 30%;
+}
+.tableSearch{
+	background: lightblue;
+	width: 100%;
+}
+.DetailsItemSearch{
+	border-radius: 1.4em 0 1.4em 0;
+	/*border: 1px solid red;*/
+}
+.CellItemDetailSearch{
+	padding: 0.1em 0.1em;
+	box-shadow: 0px 0.02em 0.02em 0.01em rgba(255,93,251,0.5);
+}
+.CellItemDetailSearch a{
+	text-decoration: none;
+	display: block;
+	padding: 0.3em 0.5em;	
+}
+.CellItemDetailSearch a:hover{
+	background: black;
+	color: white;
 }
 
 .Apartados{
@@ -170,7 +200,7 @@ body{
 }
 
 .secDetalleDIV{
-	position: relative;
+	/*position: relative;*/
 	display: inline-block;
 }
 
@@ -186,13 +216,13 @@ body{
 }
 
 .CellItemHeader{
-	border: 2px solid gray;
+	border: 2px solid black;
 	background: black;
 	padding: 0 0 0 0.2em;
 }
 
 .CellItemDetail{
-	border: 2px solid gray;
+	border: 2px solid black;
 	padding: 0 0.3em;
 }
 
@@ -210,23 +240,32 @@ body{
 	text-align: right;
 
 }
-
+.Item{
+	/*position: relative;*/
+}
 .tTotals{
 	text-align: right;
-	position:absolute;
-	right:0;
+	position: absolute;
+	left: 500px;
 	padding: 0;
 	margin: 1em 0 0 0;
 }
-
+.Pago{
+	text-align: right;
+	margin: 0;
+	padding: 0;
+}
 .Totals{
+	border-radius: 0.2em 0.2em 0.2em 0.2em;	
+	border: 1px solid red;
+	box-shadow: 0px 0.5em 0.7em 0.01em rgba(255,93,251,0.5);
 	margin: 0.2em 0;
 	padding: 0.3em 0.2em;
-	border: 1px solid red;
 }
 
 .PrintFact{
-	position: absolute;
+	position: relative;
+	margin: 2em 0 0 0;
 }
 
 .secApartados{
@@ -245,3 +284,10 @@ body{
 	margin: 0 0 0 0.2em;
 }
 
+.aProd{
+	color: black;
+}
+
+.HideItem{
+	display: none;
+}

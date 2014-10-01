@@ -24,7 +24,7 @@
 				<li> <a class="clsFacturar" id="BtFacturar" href="#">Facturar</a></li>
 				<li> <a class="clsFacturar" id="BtApartar" href="#">Apartar</a></li>
 
-				<li> <a class="clsAdministrar" href="">Administrar </a></li>
+				<li> <a class="clsAdministrar" href="http://127.0.0.1:8000/admin">Administrar </a></li>
 			</ul>
 		</nav>
 
@@ -35,12 +35,12 @@
 			<input type="text" name="producto" class="ProductDescrp TextBoxes" PlaceHolder="Buscar Producto" id="iProd" />
 			<a href="#" class="AddItem" id="btAdd">Agregar</a>
 		</section>	
-		<section id="productosajax"> </section>
+		<table id="productosajax" class="tableSearch"> </table>
 		
 		<section class="secDetalle">
 			<div class="secDetalleDIV">
 			<article class="Item">
-				<table class="tableItem" id="Items">
+				<table class="tableItem HideItem" id="Items">
 					<tr class="HeaderItem">
 						<td class="CellItemHeader">
 						Cod. Prod.						
@@ -64,13 +64,13 @@
 							
 						</td>
 					</tr>
-					<tr class="DetailsItem" id="idItem">
-						<td class="CellItemDetail dCod"> xxxx</td>
-						<td class="CellItemDetail dDescrp"> xxxxxxxxxxxxxxxxxxxxxxxx</td>
-						<td class="CellItemDetail dCant"> <input name="cant" type="text" class="TextBoxes TextItems" PlaceHolder="0.00"/> </td>
-						<td class="CellItemDetail dPrecio"> <input name="cant" type="text" class="TextBoxes TextItems" PlaceHolder="0.00"/></td>
-						<td class="CellItemDetail dDesc"> <input name="cant" type="text" class="TextBoxes TextItems" PlaceHolder="0.00"/> </td>
-						<td class="CellItemDetail dImporte"> <input name="cant" type="text" class="TextBoxes TextItems" PlaceHolder="0.00"/> </td>
+					<tr class="DetailsItem HideItem" id="idItem">
+						<td class="CellItemDetail dCod" id="iCodigo"> </td>
+						<td class="CellItemDetail dDescrp" id="iDescripcion"> </td>
+						<td class="CellItemDetail dCant"> <input id="iCantidad" type="text" class="TextBoxes TextItems" PlaceHolder="0.00"/> </td>
+						<td class="CellItemDetail dPrecio"> <input id="iPrecio" type="text" class="TextBoxes TextItems" PlaceHolder="0.00"/></td>
+						<td class="CellItemDetail dDesc"> <input id="iDescuento" type="text" class="TextBoxes TextItems" PlaceHolder="0.00"/> </td>
+						<td class="CellItemDetail dImporte"> <input id="iImporte" type="text" class="TextBoxes TextItems" PlaceHolder="0.00"/> </td>
 						<td class="CellDelete CellItemDetail" id="idDelete"><a href="#" class="DelItem icon-delete"> </a> </td>
 					</tr>
 					
@@ -82,19 +82,31 @@
 					</tr>
 					<tr>
 						<td>Pago:</td>
-						<td> <p class="Totals"><input name="cant" type="text" class="Totals" PlaceHolder="0.00"/> </p></td>
+						<td> <p class="Pago"><input name="cant" type="text" class="Totals Pago" PlaceHolder="0.00"/> </p></td>
 					</tr>
 					<tr>
 						<td>Cambio:</td>
 						<td> <p class="Totals">12,000.52 </p></td>
 					</tr>
+					<tr>
+						<td> </td>
+						<td>
+							<p>
+							<a href="javascript:void(0);" class="AddItem PrintFact">Imprimir </a>
+							</p>
+						</td>
+					</tr>
 				</table>
-				<a href="#" class="AddItem PrintFact">Imprimir </a>
 			</article>
 		</div>	
 		</section>
 	</section>
 
+
+
+	<!-- ******************************************************************************* -->
+	<!-- ESTA ES LA SECCION PARA LOS APARTADOS -->
+	<!-- ******************************************************************************* -->
 	<section id="idApartados">
 	
 		<section class="secApartados">
