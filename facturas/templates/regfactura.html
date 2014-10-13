@@ -16,7 +16,7 @@
 		<figure class="LogoPag">
 			<img class="LogoImg" src="../static/Logo.png" alt="Logo" />		
 		</figure>	
-		<p class="TitleSystem"> Sistema de Facturación para D' Sherlyn Closet -  {{ user }} </p>
+		<p class="TitleSystem"> Sistema de Facturación para D' Sherlyn Closet </p>
 	</header>
 	</div>
 		<nav class="Menu">
@@ -37,48 +37,58 @@
 		</section>	
 		<table id="productosajax" class="tableSearch"> </table>
 		
+		<form action="/facturas/creafactura" method="POST">
 		<section class="secDetalle">
 			<div class="secDetalleDIV">
 			<article class="Item">
 				<table class="tableItem HideItem" id="Items">
 					<tr class="HeaderItem">
 						<td class="CellItemHeader">
+						#						
+						</td>
+						<td class="CellItemHeader">
 						Cod. Prod.						
 						</td>
 						<td class="CellItemHeader">
 						Descripción
 						</td>
-						<td class="CellItemHeader">
+						<td class="CellItemHeader CellItemHeaderNumber">
 						Cant.						
 						</td>
-						<td class="CellItemHeader">
+						<td class="CellItemHeader CellItemHeaderNumber">
 						Precio						
 						</td>
-						<td class="CellItemHeader">
+						<td class="CellItemHeader CellItemHeaderNumber">
 						Desc.						
 						</td>
-						<td class="CellItemHeader">
+						<td class="CellItemHeader CellItemHeaderNumber">
 						Importe						
 						</td>
 						<td class="HeaderDelete CellItemHeader" id="idHeaderDelete">
 							
 						</td>
+						<td class="HeaderDelete CellItemHeader" id="idHeaderApartar">
+							
+						</td>
 					</tr>
 					<tr class="DetailsItem HideItem" id="idItem">
+						<td class="CellItemDetail dCod" id="iSec"> </td>
 						<td class="CellItemDetail dCod" id="iCodigo"> </td>
 						<td class="CellItemDetail dDescrp" id="iDescripcion"> </td>
 						<td class="CellItemDetail dCant"> <input id="iCantidad" type="text" class="TextBoxes TextItems" PlaceHolder="0.00"/> </td>
 						<td class="CellItemDetail dPrecio"> <input id="iPrecio" type="text" class="TextBoxes TextItems" PlaceHolder="0.00"/></td>
 						<td class="CellItemDetail dDesc"> <input id="iDescuento" type="text" class="TextBoxes TextItems" PlaceHolder="0.00"/> </td>
-						<td class="CellItemDetail dImporte"> <input id="iImporte" type="text" class="TextBoxes TextItems" PlaceHolder="0.00"/> </td>
+						<td class="CellItemDetail dImporte"> <span id="idImporte"> 0.00 </span> </td>
 						<td class="CellDelete CellItemDetail" id="idDelete"><a href="#" class="DelItem icon-delete"> </a> </td>
+						<td class="CellDelete CellItemDetail" id="idApartar"><a href="#" class="ApartarItem icon-apartar"> </a> </td>
 					</tr>
 					
-				</table>
+			</table>
+		</form>
 				<table class="tTotals">
 					<tr>
 						<td> Total: </td>
-						<td> <p class="Totals">12,000.52 </p></td>
+						<td> <p class="Totals" id="iTOTAL">00,000.00</p></td>
 					</tr>
 					<tr>
 						<td>Pago:</td>
@@ -86,7 +96,7 @@
 					</tr>
 					<tr>
 						<td>Cambio:</td>
-						<td> <p class="Totals">12,000.52 </p></td>
+						<td> <p class="Totals">00,000.00</p></td>
 					</tr>
 					<tr>
 						<td> </td>
@@ -157,7 +167,7 @@
 						<td class="CellItemDetail dCant"> <input name="cant" type="text" class="TextBoxes TextItems" PlaceHolder="0.00"/> </td>
 						<td class="CellItemDetail dPrecio"> <input name="cant" type="text" class="TextBoxes TextItems" PlaceHolder="0.00"/></td>
 						<td class="CellItemDetail dDesc"> <input name="cant" type="text" class="TextBoxes TextItems" PlaceHolder="0.00"/> </td>
-						<td class="CellItemDetail dImporte"> <input name="cant" type="text" class="TextBoxes TextItems" PlaceHolder="0.00"/> </td>
+						<td class="CellItemDetail dImporte"> 0.00 </td>
 						<td class="CellDelete CellItemDetail" id="idDelete"><a href="#" class="DelItem icon-delete"> </a> </td>
 					</tr>
 					

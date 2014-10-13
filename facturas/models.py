@@ -3,13 +3,14 @@ from django.db import models
 from productos.models import Producto
 
 class Factura(models.Model):
+	
 	facturas_choices = (('A','Activa'),('I','Inactiva'),)
 	facturas_impresa = (('S','SI'),('N','NO'),)
 
 	no_factura = models.IntegerField()
 	fecha = models.DateTimeField(auto_now_add=True)
-	estatus = models.CharField(max_length=1, choices=facturas_choices)
-	impresa = models.CharField(max_length=1, choices=facturas_impresa)
+	estatus = models.CharField(max_length=1, choices=facturas_choices, default='A')
+	impresa = models.CharField(max_length=1, choices=facturas_impresa, default='N')
 
 class Detalle(models.Model):
 	

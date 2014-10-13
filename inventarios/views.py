@@ -1,3 +1,11 @@
 from django.shortcuts import render
 
-# Create your views here.
+from facturas.models import Factura, Detalle
+from .models import Inventario
+
+def CantidadDisponibleProducto(producto):
+	vendidos = Factura.objects.filter(fecha)
+
+	
+def CantidadDisponible(request):
+	
