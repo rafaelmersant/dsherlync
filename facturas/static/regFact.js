@@ -1,8 +1,9 @@
 var $prodLS = localStorage;
 var RegCOUNT = 0;
+var $i = 0;
 
 // SELECCIONAR TEXTO COMPLETO CUANDO ENTRA EL FOCUS
-$("input[type='text']").click(function () {
+$('#iProd').click(function () {
    $(this).select();
 });
 
@@ -26,60 +27,41 @@ function agregarProducto(codigo, descrp, departamento, varprecio){
 
 	$('#Items').removeClass('HideItem');
 
-	$Item = $('#idItem');
 	$content = $('#Items');
-
-	clone = $Item.clone();
-
-	clone.hide();
-	clone.removeClass('HideItem');
-	clone.addClass('IDITEM');
 
 	RegCOUNT = RegCOUNT + 1;
 
-	//Cambiar los IDs para el nuevo registro
-	clone.find('#idItem').html($('#idItem' + RegCOUNT).html());
-	clone.find('#iCantidad').html($('#iCantidad' + RegCOUNT).html());
-	clone.find('#iPrecio').html($('#iPrecio' + RegCOUNT).html());
-	clone.find('#iDescuento').html($('#iDescuento' + RegCOUNT).html());
-	clone.find('#iImporte').html($('#iImporte' + RegCOUNT).html());
-
-	console.log('#idItem' + RegCOUNT);
-
-	clone.find('#iSec').text(RegCOUNT);
-	clone.find('#iCodigo').text(codigo);
-	clone.find('#iDescripcion').text(descrp);
-	//clone.find('#iPrecio').val(varprecio); //USADA PARA CUANDO VA A TRAER EL PRECIO DE BASE DE DATOS
 	
-	clone.find('#iCantidad' + RegCOUNT).val('1');
-	clone.find('#iImporte' + RegCOUNT).text(($('#iCantidad' + RegCOUNT).val() * $('#iPrecio' + RegCOUNT).val()) - $('#iDescuento' + RegCOUNT).val() );
-	
-	console.log(clone);
-	console.log(RegCOUNT);
-
 	Cantidad = '1';
 	Codigo = codigo;
 	Precio = varprecio;
-
 	item = {'Codigo': Codigo, 'Cantidad': Cantidad, 'Precio': Precio};
-
 	prodLS[RegCOUNT] =  JSON.stringify(item);
 
 	///clone.find('#iPrecio' + RegCOUNT).blur(CalculaLinea(RegCOUNT));
 
-	clone.addClass(departamento);
-	clone.find('#iPrecio' + RegCOUNT).addClass(departamento);
-	clone.find('#iCantidad' + RegCOUNT).addClass(departamento);
-	clone.find('#iDescuento' + RegCOUNT).addClass(departamento);
-	clone.find('#iImporte' + RegCOUNT).addClass(departamento);
+	$content.append('<tr class="DetailsItem" id="idItemF"' + RegCOUNT + '>' +
+						'<td class="CellItemDetail ' + departamento + ' dCod" id="iSec'+ RegCOUNT +' ">' + RegCOUNT +' </td>' +
+						'<td class="CellItemDetail ' + departamento + ' dCod" id="iCodigo'+ RegCOUNT +'">' + codigo + ' </td>' +
+						'<td class="CellItemDetail ' + departamento + ' dDescrp" id="iDescripcion'+ RegCOUNT +'">' + descrp + ' </td>' +
+						'<td class="CellItemDetail ' + departamento + ' dCant"> <input id="iCantidad'+ RegCOUNT +'" onkeypress="return event.charCode >= 48 && event.charCode <= 57" type="text" value="1" class="TextBoxes TextItems" PlaceHolder="0.00"/> </td>' +
+						'<td class="CellItemDetail ' + departamento + ' dPrecio"> <input id="iPrecio'+ RegCOUNT +'" onkeypress="return event.charCode >= 48 && event.charCode <= 57" type="text" class="TextBoxes TextItems" PlaceHolder="0.00"/></td>' +
+						'<td class="CellItemDetail ' + departamento + ' dDesc"> <input id="iDescuento'+ RegCOUNT +'" onkeypress="return event.charCode >= 48 && event.charCode <= 57" type="text" class="TextBoxes TextItems" PlaceHolder="0.00"/> </td>' +
+						'<td class="CellItemDetail ' + departamento + ' dImporte"> <span id="idImporte'+ RegCOUNT +'"> 0.00 </span> </td>' +
+						'<td class="CellDelete CellItemDetail" id="idDelete'+ RegCOUNT +'"><a href="#" class="DelItem icon-delete"> </a> </td>' +
+						'<td class="CellDelete CellItemDetail" id="idApartar'+ RegCOUNT +'"><a href="#" class="ApartarItem icon-spinner"> </a> </td>' +
+					'</tr>').fadeIn('fast');
 
-	clone.find('#iPrecio' + RegCOUNT).focus(function(){$(this).select();});
 
-	$content.append(clone);
-
-	clone.fadeIn();
-
+	//SELECCIONAR EL TEXTO COMPLETO DE LOS SIGUIENTES CAMPOS
+	$('#iCantidad' + RegCOUNT).click(function(){$(this).select();});
+	$('#iPrecio' + RegCOUNT).click(function(){$(this).select();});
+	$('#iDescuento' + RegCOUNT).click(function(){$(this).select();});
+	//*****FIN SELECCION COMPLETA DE TEXTO EN CAMPOS**********
+	
+	CalculaLinea(RegCOUNT);
 }
+
 
 // FUNCION DEL BOTON AGREGAR
 $('#btAdd').click(function(){
@@ -95,7 +77,31 @@ $('#iPrecio').on('input',CalculaLinea);
 
 //CALCULA UNA LINEA DE LA FACTURA
 function CalculaLinea(iReg){
-	alert('CALCULA LINEA' + iReg);
+	defaultPrevented = false;
+
+	$('#iPrecio' + iReg).on('input',function() {CalculaNow(iReg);});
+	$('#iCantidad' + iReg).on('input',function() {CalculaNow(iReg);});
+	$('#iDescuento' + iReg).on('input',function() {CalculaNow(iReg);});
+
+	function CalculaNow(registernumber)
+	{
+		$('#idImporte' + registernumber).text(($('#iCantidad' + registernumber).val() * $('#iPrecio' + registernumber).val()) - $('#iDescuento' + registernumber).val());
+		CalculaTOTALES();
+	}
+}
+//CALCULA EL BLOQUE COMPLETO DE LA FACTURA (TOTALES GENERALES)
+function CalculaTOTALES(){
+	var $t = RegCOUNT;
+	var valor = 0;
+
+	while($t > 0 )
+	{
+		valor = valor + parseInt($('#idImporte' + $t).text());
+		--$t;
+		console.log($t);
+	}
+
+	$('#iTOTAL').text(valor);
 }
 
 // FUNCION PARA BUSCAR LOS PRODUCTOS EN LA API Y DIBUJAR LA TABLA CON LOS PRODUCTOS ENCONTRADOS
@@ -108,7 +114,8 @@ $('#iProd').on('input', function(e){
 
 			$.each(data, function(index, element) {
 				contenido.append(
-					'<tr class="DetailsItemSearch" id=\"' + RegCOUNT +'\">' + 
+					// '<tr class="DetailsItemSearch" id=\"' + RegCOUNT +'\">' + 
+					'<tr class="DetailsItemSearch" id=' + RegCOUNT +'>' + 
 					'<td id="idCod" class="CellItemDetailSearch '+ element['departamento'] +'">' + element['codigo'] +'</td>' +					
 					'<td id="idDescrp" class="CellItemDetailSearch '+ element['departamento'] +'">'
 						+'<a href="javascript:void(0);" class="'+ element['departamento'] + '"' 	
