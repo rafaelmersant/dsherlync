@@ -30,15 +30,12 @@ function agregarProducto(codigo, descrp, departamento, varprecio){
 	$content = $('#Items');
 
 	RegCOUNT = RegCOUNT + 1;
-
 	
 	Cantidad = '1';
 	Codigo = codigo;
 	Precio = varprecio;
 	item = {'Codigo': Codigo, 'Cantidad': Cantidad, 'Precio': Precio};
 	prodLS[RegCOUNT] =  JSON.stringify(item);
-
-	///clone.find('#iPrecio' + RegCOUNT).blur(CalculaLinea(RegCOUNT));
 
 	$content.append('<tr class="DetailsItem" id="idItemF"' + RegCOUNT + '>' +
 						'<td class="CellItemDetail ' + departamento + ' dCod" id="iSec'+ RegCOUNT +' ">' + RegCOUNT +' </td>' +
@@ -104,6 +101,9 @@ function CalculaTOTALES(){
 	$('#iTOTAL').text(valor);
 }
 
+$('#iPagoF').on('input', function(){
+	$('#iCambioF').text($('#iPagoF').val() - parseInt($('#iTOTAL').text()));
+})
 // FUNCION PARA BUSCAR LOS PRODUCTOS EN LA API Y DIBUJAR LA TABLA CON LOS PRODUCTOS ENCONTRADOS
 $('#iProd').on('input', function(e){
 	e.defaultPrevented = false;
