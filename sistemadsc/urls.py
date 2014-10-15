@@ -21,7 +21,7 @@ urlpatterns = patterns('',
 
     #API
     url(r'^api/productos/$', ProductoListView.as_view()),
-    url(r'^api/productos/(?P<descrp>[\w\d]+)/$', ProductoListView.as_view()),
+    url(r'^api/productos/(?P<descrp>[\w\s]+)/$', ProductoListView.as_view()),
 
     url(r'^api/grupos/$', GrupoListView.as_view()),
     url(r'^api/grupos/(?P<pk>\w+)/$', GrupoListView.as_view()),

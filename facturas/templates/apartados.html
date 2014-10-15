@@ -1,0 +1,80 @@
+{% extends 'masterpage.html' %}
+
+{% block content %}
+
+	<section id="idApartados">
+	
+		<section class="secApartados">
+			
+			<article class="artCliente">
+				<label for="cliente" class="LabelCliente">Cliente:</label>
+				<input type="text" name="cliente" class="ProductDescrp TextBoxes TextBoxCte" PlaceHolder="Buscar Cliente" id="iCliente" />
+				<a href="#" class="AddItem AddItemCte" id="btAddCte">Agregar Cliente</a>
+			</article>
+
+			<article class="artProducto">
+				<label for="producto" class="LabelProduct">Producto:</label>
+				<input type="text" name="producto" class="ProductDescrp TextBoxes" PlaceHolder="Buscar Producto" id="iProdCte" />
+				<a href="#" class="AddItem" id="btAddProdCte">Agregar Producto</a>
+			</article>
+		</section>	
+		
+		<section class="secDetalle">
+			<div class="secDetalleDIV">
+			<article class="Item">
+				<table class="tableItem" id="ItemsCte">
+					<tr class="HeaderItem">
+						<td class="CellItemHeader">
+						Cod. Prod.						
+						</td>
+						<td class="CellItemHeader">
+						Descripción
+						</td>
+						<td class="CellItemHeader">
+						Cant.						
+						</td>
+						<td class="CellItemHeader">
+						Precio						
+						</td>
+						<td class="CellItemHeader">
+						Desc.						
+						</td>
+						<td class="CellItemHeader">
+						Importe						
+						</td>
+						<td class="HeaderDelete CellItemHeader" id="idHeaderDelete">
+							
+						</td>
+					</tr>
+					<tr class="DetailsItem" id="idItem">
+						<td class="CellItemDetail dCod"> xxxx</td>
+						<td class="CellItemDetail dDescrp"> xxxxxxxxxxxxxxxxxxxxxxxx</td>
+						<td class="CellItemDetail dCant"> <input name="cant" type="text" class="TextBoxes TextItems" PlaceHolder="0.00"/> </td>
+						<td class="CellItemDetail dPrecio"> <input name="cant" type="text" class="TextBoxes TextItems" PlaceHolder="0.00"/></td>
+						<td class="CellItemDetail dDesc"> <input name="cant" type="text" class="TextBoxes TextItems" PlaceHolder="0.00"/> </td>
+						<td class="CellItemDetail dImporte"> 0.00 </td>
+						<td class="CellDelete CellItemDetail" id="idDelete"><a href="#" class="DelItem icon-delete"> </a> </td>
+					</tr>
+					
+				</table>
+				<table class="tTotals">
+					<tr>
+						<td> Total: </td>
+						<td> <p class="Totals">12,000.52 </p></td>
+					</tr>
+					<tr>
+						<td>Pago:</td>
+						<td> <p class="Totals"><input name="cant" type="text" class="Totals" PlaceHolder="0.00"/> </p></td>
+					</tr>
+					<tr>
+						<td>Cambio:</td>
+						<td> <p class="Totals">12,000.52 </p></td>
+					</tr>
+				</table>
+				<a href="#" class="AddItem PrintFact">Imprimir </a>
+			</article>
+		</div>	
+		</section>
+
+	</section>
+{% endblock %}

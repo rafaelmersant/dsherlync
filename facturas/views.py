@@ -3,8 +3,8 @@ from django.http import Http404
 
 from .models import Factura, Detalle
 
-def index(request):
-	return render(request, 'regfactura.html')
+def  index(request):
+    return render(request, 'regfactura.html')
 
 def AgregarFactura(request, id_factura):
 	if id_factura == 0:
