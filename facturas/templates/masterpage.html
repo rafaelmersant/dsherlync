@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Facturacion</title>
+	<title> {% block title %} {% endblock%} </title>
 	<link rel="stylesheet" type="text/css" href="../static/normalize.css">
 	<link rel="stylesheet" href="../static/estilos.css">
 	<link rel="stylesheet" href="../static/iconfonts.css">
@@ -22,15 +22,16 @@
 
 		<nav class="Menu">
 			<ul class="UlMenu">
-				<li> <a class="clsFacturar" id="BtFacturar" href="#">Facturar</a></li>
-				<li> <a class="clsFacturar" id="BtApartar" href="#">Apartar</a></li>
+				<li> <a class="clsFacturar" id="BtFacturar" href="/facturas">Facturar</a></li>
+				<li> <a class="clsFacturar" id="BtApartar" href="/apartados">Apartar</a></li>
+				<li> <a class="clsFacturar" id="BtReporte" href="/reportedia">Reporte Ventas</a></li>
 
 				<li> <a class="clsAdministrar" href="http://127.0.0.1:8000/admin">Administrar </a></li>
 			</ul>
 		</nav>
 
 		{% block content %}
-		{% endblock %}
+		{% endblock content %}
 
 	<footer>
 		

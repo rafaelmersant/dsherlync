@@ -60,13 +60,6 @@ body{
 	color: white;
 }
 
-.Apartados{
-	display: none;
-}
-.Facturacion{
-	display: none;
-}
-
 .HeaderPag{
 	/*position: relative;*/
 	display: block;
@@ -283,11 +276,13 @@ body{
 	box-shadow: 0px 0.5em 0.7em 0.01em rgba(255,93,251,0.5);
 	margin: 0.2em 0;
 	padding: 0.3em 0.2em;
+	width: 186px;
 }
 
 .PrintFact{
 	position: relative;
 	margin: 2em 0 0 0;
+	border: 0;
 }
 
 .secApartados{
@@ -312,4 +307,11 @@ body{
 
 .HideItem{
 	display: none;
+}
+
+.clsMessage{
+
+	color: red;
+	font-weight: bold;
+	font-size: 14px;
 }
