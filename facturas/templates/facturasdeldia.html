@@ -1,0 +1,22 @@
+{% extends 'masterpage.html' %}
+
+{% block title %} Facturación del dia {% endblock title %}
+
+{% block content %}
+
+<section>
+	<div>
+		{% for factura in object_list %}
+
+		<div class="factura">
+			{{ factura.factura }} --> {{ factura.total }}
+		</div>
+
+		{% empty %}
+			<p>NO EXISTEN REGISTROS</p>
+		{% endfor %}
+
+	</div>
+</section>
+
+{% endblock content %}

@@ -1,8 +1,9 @@
 //var $prodLS = localStorage;
 var RegCOUNT = 0;
 var $i = 0;
-var $dataFacturar = [];
-var $dataApartar = [];
+var $dataFacturar = {};
+var itemsfactura = [];
+var $dataApartar = {itemsapartar: []};
 
 // SELECCIONAR TEXTO COMPLETO CUANDO ENTRA EL FOCUS
 $('#iProd').click(function () {
@@ -40,7 +41,9 @@ function agregarProducto(codigo, descrp, departamento, varprecio){
 	item.Codigo = Codigo;
 	item.Cantidad = Cantidad;
 	item.Precio = Precio;
+	item.Descuento = "0.00";
 
+	// prodLS['F' + RegCOUNT] =  item;
 	prodLS['F' + RegCOUNT] =  JSON.stringify(item);
 
 	$content.append('<tr class="DetailsItem" id="idItemF' + RegCOUNT + '">' +
@@ -91,16 +94,21 @@ function ClasificarFacturados(){
 
 	for (i=0; i<prodLS.length; i++){
 		if(prodLS.key(i).substring(0,1) == 'F')
-			$dataFacturar.push(prodLS.getItem(prodLS.key(i)));
+			itemsfactura.push(JSON.parse(prodLS.getItem(prodLS.key(i))));
+			// console.log(prodLS.getItem(prodLS.key(i)));
+			// $dataFacturar.itemsfactura.push(prodLS.getItem(prodLS.key(i)));
 			// $dataFacturar = $dataFacturar + prodLS.getItem(prodLS.key(i)) + ',';
 	}
+
+	$dataFacturar.itemsfactura = itemsfactura;
 }
 
 function ClasificarApartados(){
 
 	for (i=0; i<prodLS.length; i++){
 		if(prodLS.key(i).substring(0,1) == 'A')
-			$dataApartar.push(prodLS.getItem(prodLS.key(i)));
+			console.log('');
+			// $dataApartar.itemsapartar.push(prodLS.getItem(prodLS.key(i)));
 			// $dataApartar = $dataApartar + prodLS.getItem(prodLS.key(i)) + ',';
 	}
 }
@@ -123,7 +131,8 @@ function ApartarReg(registroAP){
 	datos.Precio = $('#iPrecio' + registroAP).val();
 	datos.Descuento = $('#iDescuento' + registroAP).val();
 
-	itemA = JSON.stringify(datos);
+	itemA = datos;
+	// itemA = JSON.stringify(datos);
 	prodLS['A' + registroAP] = itemA;
 	prodLS.removeItem('F' + registroAP);
 	$('#idItemF' + registroAP).html('');
@@ -151,6 +160,8 @@ function CalculaLinea(iReg){
 	function CalculaNow(registernumber)
 	{
 		$('#idImporte' + registernumber).text(($('#iCantidad' + registernumber).val() * $('#iPrecio' + registernumber).val()) - $('#iDescuento' + registernumber).val());
+		// $dataFacturar
+
 		CalculaTOTALES();
 	}
 }
@@ -180,6 +191,17 @@ function DevueltaAlCliente(){
 
 	$('#iCambioF').text( $('#iPagoF').val() - parseInt($('#iTOTAL').text()) );
 }
+
+
+//PARA ENVIAR A MONTO A PAGAR CUANDO SE PRESIONE ENTER
+$('#iProd').on('keypress', function(e) {
+	//SI ES ENTER MOVER HACIA EL MONTO A PAGAR
+	if (event.charCode == 13){
+		$('#iPagoF').focus().select();
+	}
+
+});
+
 
 // FUNCION PARA BUSCAR LOS PRODUCTOS EN LA API Y DIBUJAR LA TABLA CON LOS PRODUCTOS ENCONTRADOS
 $('#iProd').on('input', function(e){
@@ -254,21 +276,18 @@ function facturarImprimir(e){
 	});
 
 
-	$.ajax('http://127.0.0.1:8000/facturar/', {
-	    type : 'POST', 
-	    contentType : 'json',
-	    data : {
-	    // data : {itemsToAdd: JSON.stringify($dataFacturar)
-	    		 'itemsToAdd': $dataFacturar
-	    		},
-	    // data : {items: JSON.stringify($dataFacturar)},
+	$.ajax({
+	    type: "POST",
+	    url: "http://127.0.0.1:8000/facturar/",
+	    data: JSON.stringify({'items': $dataFacturar.itemsfactura}),
+	    contentType: 'application/json; charset=utf-8',
+	    // dataType: "json",
+
 	    success: function (data) {
 	        $('#iMessage').text(data);
 	    }
-	    
-
-});
-	// console.log($dataFacturar);
+	});
+	console.log(JSON.stringify({'items': JSON.stringify($dataFacturar.itemsfactura)}));
 	// $.post("/facturar/", $dataFacturar, function(returnedData) {
 	// 	$('#iMessage').text('La factura fue guardada con exito.');
 	// })

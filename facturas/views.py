@@ -1,11 +1,29 @@
 from django.shortcuts import render
 from django.http import Http404, HttpResponse, QueryDict
-from django.views.generic import View
-
+from django.views.generic import View, ListView
+from django.db.models import Sum
+import datetime
 
 import json
+import math
 
 from .models import Factura, Detalle
+from productos.models import Producto
+
+
+class FacturasDelDia(ListView):
+
+	template_name = 'facturasdeldia.html'
+	model = Detalle
+
+	def get_queryset(self):
+		if self.kwargs.get('fecha'):
+			super(FacturasDelDia,self)
+			queryset = Detalle.objects.filter(factura__fecha__year = self.kwargs.get('fecha')) #filter(factura=self.kwargs.get('fecha')).aggregate(Sum('precio'))
+		else:
+			queryset = super(FacturasDelDia, self).get_queryset().order_by('-factura')
+
+		return queryset
 
 
 class FacturarView(View):
@@ -16,19 +34,39 @@ class FacturarView(View):
 		except Exception as e:
 			return HttpResponse(e)
 
+
 	def post(self, request, *args, **kwargs):
 		try:
-			# items = json.loads(request.POST.get('items'))
-			
-			items = request.POST.get('itemsToAdd') 
-			# data = json.parse(items)
-			# data = items['itemsToAdd']
 
-			return HttpResponse(items)
+			data = json.loads(request.body)
+
+			next_factura = Factura.objects.latest('pk').no_factura + 1
+			
+			factura = Factura()
+			factura.no_factura = next_factura
+			factura.save()
+
+			toma = ''
+			for item in data:
+				codigo = 'CAM01' #item['Codigo']
+				cantidad = 1 #item['Codigo']
+				descuento = 0 #item['Descuento']
+				precio = 200 #item['Precio']
+
+				toma = item['Codigo']
+
+				detalle = Detalle()
+				detalle.producto = Producto.objects.get(codigo=codigo)
+				detalle.cantidad = cantidad
+				detalle.descuento = descuento
+				detalle.precio = precio
+				detalle.factura = Factura.objects.get(no_factura=next_factura)
+				detalle.save()
+
+			return HttpResponse(toma)
 
 		except Exception as e:
 			return HttpResponse(e)
-
 
 
 def index(request):
