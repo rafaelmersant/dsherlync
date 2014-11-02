@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from django.http import Http404, HttpResponse, QueryDict
 from django.views.generic import View, ListView
-from django.db.models import Sum
+from django.db.models import Sum, Count
+
 import datetime
 
 import json
@@ -17,11 +18,17 @@ class FacturasDelDia(ListView):
 	model = Detalle
 
 	def get_queryset(self):
-		if self.kwargs.get('fecha'):
-			super(FacturasDelDia,self)
-			queryset = Detalle.objects.filter(factura__fecha__year = self.kwargs.get('fecha')) #filter(factura=self.kwargs.get('fecha')).aggregate(Sum('precio'))
+		if self.kwargs.get('Fecha'):
+			# super(FacturasDelDia,self)
+			# queryset = super(FacturasDelDia, self).get_queryset().filter(factura=221)
+			queryset = Detalle.objects.filter(factura=21)
+			
 		else:
-			queryset = super(FacturasDelDia, self).get_queryset().order_by('-factura')
+			queryset = Detalle.objects.filter(factura=221)
+
+			# queryset = super(FacturasDelDia, self).get_queryset().raw('select id, factura_id, sum(precio*cantidad) - descuento importeLine' 
+				# + ' from facturas_detalle group by factura_id order by factura_id desc')
+			# queryset = super(FacturasDelDia, self).get_queryset().values('factura').order_by('-factura').annotate(Sum('precio'))
 
 		return queryset
 
@@ -39,21 +46,22 @@ class FacturarView(View):
 		try:
 
 			data = json.loads(request.body)
+			items = request.body
 
 			next_factura = Factura.objects.latest('pk').no_factura + 1
 			
 			factura = Factura()
 			factura.no_factura = next_factura
 			factura.save()
+			
+			for item in data['items']:
+				codigo = item['Codigo'].strip()
+				cantidad = item['Cantidad']
+				descuento = float(item['Descuento'])
+				precio = item['Precio']
 
-			toma = ''
-			for item in data:
-				codigo = 'CAM01' #item['Codigo']
-				cantidad = 1 #item['Codigo']
-				descuento = 0 #item['Descuento']
-				precio = 200 #item['Precio']
-
-				toma = item['Codigo']
+				if descuento == '':
+					descuento = '0'
 
 				detalle = Detalle()
 				detalle.producto = Producto.objects.get(codigo=codigo)
@@ -63,7 +71,7 @@ class FacturarView(View):
 				detalle.factura = Factura.objects.get(no_factura=next_factura)
 				detalle.save()
 
-			return HttpResponse(toma)
+			return HttpResponse(1)
 
 		except Exception as e:
 			return HttpResponse(e)

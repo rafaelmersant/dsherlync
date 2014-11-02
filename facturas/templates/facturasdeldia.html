@@ -5,18 +5,27 @@
 {% block content %}
 
 <section>
+	<br>
+	
+	<form action="" method="get" >
+	
+	<div class="factura"> FECHA: <input id="iFecha" name="Fecha" type="text" PlaceHolder="Fecha"/> <input type="submit" value="Buscar"> </div> 
+	</form>
+
+	<hr/>
 	<div>
 		{% for factura in object_list %}
 
 		<div class="factura">
-			{{ factura.factura }} --> {{ factura.total }}
+			{{ factura.factura_id }} --------> {{ factura.precio }}
+			
 		</div>
 
 		{% empty %}
-			<p>NO EXISTEN REGISTROS</p>
+			<p>NO EXISTEN FACTURAS PARA LA FECHA ESPECIFICADA</p>
 		{% endfor %}
-
 	</div>
+
 </section>
 
 {% endblock content %}

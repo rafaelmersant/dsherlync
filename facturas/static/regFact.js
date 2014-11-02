@@ -1,16 +1,22 @@
-//var $prodLS = localStorage;
 var RegCOUNT = 0;
 var $i = 0;
+var $cambio = 0;
+
 var $dataFacturar = {};
 var itemsfactura = [];
-var $dataApartar = {itemsapartar: []};
 
-// SELECCIONAR TEXTO COMPLETO CUANDO ENTRA EL FOCUS
-$('#iProd').click(function () {
-   $(this).select();
-});
+var $dataApartar = {};
+var itemsApartar = [];
 
-// SECCION DE APARTADOS
+// VARIABLE PARA EL CONTENIDO DE LA TABLA DE PRODUCTOS
+var contenido = $('#productosajax');
+
+//*****************************************************************************************************
+//*****************************************************************************************************
+//INICIO DE EVENTOS
+//*****************************************************************************************************
+//*****************************************************************************************************
+
 $(document).ready(function() {
 	localStorage.clear();
 
@@ -19,166 +25,26 @@ $(document).ready(function() {
 	RegCOUNT = 0;
 })
 
+
+// SELECCIONAR TEXTO COMPLETO CUANDO ENTRA EL FOCUS
+$('#iProd').click(function () {
+   $(this).select();
+});
+
 // CUANDO SEA QUITADO EL FOCUS DE LA BUSQUEDAD DE PRODUCTOS
 $('#iProd').blur(function(){
 	$('#productosajax').fadeOut('fast');
 });
 
-// FUNCION PARA AGREGAR UN PRODUCTO A LA TABLA
-function agregarProducto(codigo, descrp, departamento, varprecio){
-
-	$('#Items').removeClass('HideItem');
-
-	$content = $('#Items');
-
-	RegCOUNT = RegCOUNT + 1;
-	
-	Cantidad = '1';
-	Codigo = codigo;
-	Precio = varprecio;
-
-	var item = new Object();
-	item.Codigo = Codigo;
-	item.Cantidad = Cantidad;
-	item.Precio = Precio;
-	item.Descuento = "0.00";
-
-	// prodLS['F' + RegCOUNT] =  item;
-	prodLS['F' + RegCOUNT] =  JSON.stringify(item);
-
-	$content.append('<tr class="DetailsItem" id="idItemF' + RegCOUNT + '">' +
-						'<td class="CellItemDetail ' + departamento + ' dCod" id="iSec'+ RegCOUNT +' ">' + RegCOUNT +' </td>' +
-						'<td class="CellItemDetail ' + departamento + ' dCod" id="iCodigo'+ RegCOUNT +'">' + codigo + ' </td>' +
-						'<td class="CellItemDetail ' + departamento + ' dDescrp" id="iDescripcion'+ RegCOUNT +'">' + descrp + ' </td>' +
-						'<td class="CellItemDetail ' + departamento + ' dCant"> <input id="iCantidad'+ RegCOUNT +'" onkeypress="return EventosTextBox(1,'+ RegCOUNT +');" type="text" value="1" class="TextBoxes TextItems" PlaceHolder="0.00"/> </td>' +
-						'<td class="CellItemDetail ' + departamento + ' dPrecio"> <input id="iPrecio'+ RegCOUNT +'" onkeypress="return EventosTextBox(2,'+ RegCOUNT+');" type="text" class="TextBoxes TextItems" PlaceHolder="0.00"/></td>' +
-						'<td class="CellItemDetail ' + departamento + ' dDesc"> <input id="iDescuento'+ RegCOUNT +'" onkeypress="return EventosTextBox(3,'+ RegCOUNT+');" type="text" class="TextBoxes TextItems" PlaceHolder="0.00"/> </td>' +
-						'<td class="CellItemDetail ' + departamento + ' dImporte"> <span id="idImporte'+ RegCOUNT +'"> 0.00 </span> </td>' +
-						'<td class="CellDelete CellItemDetail" id="idDelete'+ RegCOUNT +'"><a href="javascript:EliminarReg(' + RegCOUNT + ')" class="DelItem icon-delete"> </a> </td>' +
-						'<td class="CellDelete CellItemDetail" id="idApartar'+ RegCOUNT +'"><a href="javascript:ApartarReg('+ RegCOUNT +')" class="ApartarItem icon-spinner"> </a> </td>' +
-					'</tr>').hide().fadeIn('fast');
-
-
-	//SELECCIONAR EL TEXTO COMPLETO DE LOS SIGUIENTES CAMPOS
-	$('#iCantidad' + RegCOUNT).click(function(){$(this).select();});
-	$('#iPrecio' + RegCOUNT).click(function(){$(this).select();});
-	$('#iDescuento' + RegCOUNT).click(function(){$(this).select();});
-	//*****FIN SELECCION COMPLETA DE TEXTO EN CAMPOS**********
-	
-	CalculaLinea(RegCOUNT);
-
-	$('#iCantidad' + RegCOUNT).focus().select();
-}
-
-function EventosTextBox(concepto, posicion){
-
-	//SI ES ENTER MOVER HACIA EL PRECIO
-	if (event.charCode == 13 && concepto == 1)
-		$('#iPrecio' + posicion).focus().select();
-	
-	//SI ES ENTER MOVER HACIA EL DESCUENTO
-	if (event.charCode == 13 && concepto == 2)
-		$('#iDescuento' + posicion).focus().select();
-	
-	//SI ES ENTER MOVER HACIA LA BUSQUEDA DE PRODUCTOS
-	if (event.charCode == 13 && concepto == 3)
-		$('#iProd').focus().select();
-
-	if (event.charCode > 31 && (event.charCode < 48 || event.charCode > 57)) {
-        return false;
-    }
-    return true;
-}
-
-function ClasificarFacturados(){	
-
-	for (i=0; i<prodLS.length; i++){
-		if(prodLS.key(i).substring(0,1) == 'F')
-			itemsfactura.push(JSON.parse(prodLS.getItem(prodLS.key(i))));
-			// console.log(prodLS.getItem(prodLS.key(i)));
-			// $dataFacturar.itemsfactura.push(prodLS.getItem(prodLS.key(i)));
-			// $dataFacturar = $dataFacturar + prodLS.getItem(prodLS.key(i)) + ',';
-	}
-
-	$dataFacturar.itemsfactura = itemsfactura;
-}
-
-function ClasificarApartados(){
-
-	for (i=0; i<prodLS.length; i++){
-		if(prodLS.key(i).substring(0,1) == 'A')
-			console.log('');
-			// $dataApartar.itemsapartar.push(prodLS.getItem(prodLS.key(i)));
-			// $dataApartar = $dataApartar + prodLS.getItem(prodLS.key(i)) + ',';
-	}
-}
-
-//FUNCION PARA ELIMINAR REGISTRO
-function EliminarReg(registroDEL){
-	$('#idItemF'+registroDEL).html('');
-	prodLS['F' + registroDEL] = '';
-}
-
-//FUNCION PARA APARTAR REGISTRO
-function ApartarReg(registroAP){
-
-	$('#iTOTAL').text( parseInt($('#iTOTAL').text()) - parseInt($('#idImporte' + registroAP).text()) )
-	DevueltaAlCliente();
-
-	var datos = new Object();
-	datos.Codigo = $('#iCodigo' + registroAP).text();
-	datos.Cantidad = $('#iCantidad' + registroAP).val();
-	datos.Precio = $('#iPrecio' + registroAP).val();
-	datos.Descuento = $('#iDescuento' + registroAP).val();
-
-	itemA = datos;
-	// itemA = JSON.stringify(datos);
-	prodLS['A' + registroAP] = itemA;
-	prodLS.removeItem('F' + registroAP);
-	$('#idItemF' + registroAP).html('');
-}
-
 // FUNCION DEL BOTON AGREGAR
 $('#btNew').click(function(){
-	$(document).refresh();
+	location.reload();
+	$('#btnImprimir').removeClass('InhabilitaBoton');
+
 });
 
-
-// VARIABLE PARA EL CONTENIDO DE LA TABLA DE PRODUCTOS
-var contenido = $('#productosajax');
-
+//CADA VEZ QUE SE DIGITE EN EL PRECIO DE CUALQUIER LINEA SE RECALCULE
 $('#iPrecio').on('input',CalculaLinea);
-
-//CALCULA UNA LINEA DE LA FACTURA
-function CalculaLinea(iReg){
-	defaultPrevented = false;
-
-	$('#iPrecio' + iReg).on('input',function() {CalculaNow(iReg);});
-	$('#iCantidad' + iReg).on('input',function() {CalculaNow(iReg);});
-	$('#iDescuento' + iReg).on('input',function() {CalculaNow(iReg);});
-
-	function CalculaNow(registernumber)
-	{
-		$('#idImporte' + registernumber).text(($('#iCantidad' + registernumber).val() * $('#iPrecio' + registernumber).val()) - $('#iDescuento' + registernumber).val());
-		// $dataFacturar
-
-		CalculaTOTALES();
-	}
-}
-
-//CALCULA EL BLOQUE COMPLETO DE LA FACTURA (TOTALES GENERALES)
-function CalculaTOTALES(){
-	var $t = RegCOUNT;
-	var valor = 0;
-
-	while($t > 0 )
-	{
-		valor = valor + parseInt($('#idImporte' + $t).text());
-		--$t;
-	}
-
-	$('#iTOTAL').text(valor);
-}
 
 //CADA VEZ QUE SE DIGITE EN LA CASILLA DE PAGO ACTUALIZA LA DEVUELTA AL CLIENTE.
 $('#iPagoF').on('input', function(){
@@ -186,14 +52,7 @@ $('#iPagoF').on('input', function(){
 	DevueltaAlCliente();
 })
 
-//CALCULA LA DEVUELTA EN DINERO QUE SE DEBE ENTRAR AL CLIENTE
-function DevueltaAlCliente(){
-
-	$('#iCambioF').text( $('#iPagoF').val() - parseInt($('#iTOTAL').text()) );
-}
-
-
-//PARA ENVIAR A MONTO A PAGAR CUANDO SE PRESIONE ENTER
+//PARA ENVIAR A MONTO A PAGAR CUANDO SE PRESIONE ENTER EN LA CASILLA DE PRODUCTO
 $('#iProd').on('keypress', function(e) {
 	//SI ES ENTER MOVER HACIA EL MONTO A PAGAR
 	if (event.charCode == 13){
@@ -201,7 +60,16 @@ $('#iProd').on('keypress', function(e) {
 	}
 
 });
+//**************************************************************
 
+//PARA EJECUTAR LA FUNCION IMPRIMIR CUANDO SE HAYA DIGITADO EL MONTO A PAGAR
+$('#iPagoF').on('keypress', function(e) {
+	if (event.charCode == 13){
+		facturarImprimir();
+	}
+
+});
+//**************************************************************
 
 // FUNCION PARA BUSCAR LOS PRODUCTOS EN LA API Y DIBUJAR LA TABLA CON LOS PRODUCTOS ENCONTRADOS
 $('#iProd').on('input', function(e){
@@ -232,6 +100,158 @@ $('#iProd').on('input', function(e){
 		});
 });
 
+//*****************************************************************************************************
+//*****************************************************************************************************
+//FIN DE EVENTOS
+//*****************************************************************************************************
+//*****************************************************************************************************
+
+
+
+
+
+//*****************************************************************************************************
+//*****************************************************************************************************
+//INICIO DE FUNCIONES
+//*****************************************************************************************************
+//*****************************************************************************************************
+
+// FUNCION PARA AGREGAR UN PRODUCTO A LA TABLA
+function agregarProducto(codigo, descrp, departamento, varprecio){
+
+	$cambio = 1;
+	$('#Items').removeClass('HideItem');
+
+	$content = $('#Items');
+	RegCOUNT = RegCOUNT + 1;
+
+	$content.append('<tr class="DetailsItem" id="idItemF' + RegCOUNT + '">' +
+						'<td class="CellItemDetail ' + departamento + ' dCod" id="iSec'+ RegCOUNT +' ">' + RegCOUNT +' </td>' +
+						'<td class="CellItemDetail ' + departamento + ' dCod" id="iCodigo'+ RegCOUNT +'">' + codigo + ' </td>' +
+						'<td class="CellItemDetail ' + departamento + ' dDescrp" id="iDescripcion'+ RegCOUNT +'">' + descrp + ' </td>' +
+						'<td class="CellItemDetail ' + departamento + ' dCant"> <input id="iCantidad'+ RegCOUNT +'" onkeypress="return EventosTextBox(1,'+ RegCOUNT +');" type="text" value="1" class="TextBoxes TextItems" PlaceHolder="0.00"/> </td>' +
+						'<td class="CellItemDetail ' + departamento + ' dPrecio"> <input id="iPrecio'+ RegCOUNT +'" onkeypress="return EventosTextBox(2,'+ RegCOUNT+');" type="text" value="0.00" class="TextBoxes TextItems" PlaceHolder="0.00"/></td>' +
+						'<td class="CellItemDetail ' + departamento + ' dDesc"> <input id="iDescuento'+ RegCOUNT +'" onkeypress="return EventosTextBox(3,'+ RegCOUNT+');" type="text" value="0.00" class="TextBoxes TextItems" PlaceHolder="0.00"/> </td>' +
+						'<td class="CellItemDetail ' + departamento + ' dImporte"> <span id="idImporte'+ RegCOUNT +'"> 0.00 </span> </td>' +
+						'<td class="CellDelete CellItemDetail" id="idDelete'+ RegCOUNT +'"><a href="javascript:EliminarReg(' + RegCOUNT + ')" class="DelItem icon-delete"> </a> </td>' +
+						'<td class="CellDelete CellItemDetail" id="idApartar'+ RegCOUNT +'"><a href="javascript:ApartarReg('+ RegCOUNT +')" class="ApartarItem icon-spinner"> </a> </td>' +
+					'</tr>').hide().fadeIn('fast');
+
+
+	//SELECCIONAR EL TEXTO COMPLETO DE LOS SIGUIENTES CAMPOS
+	$('#iCantidad' + RegCOUNT).click(function(){$(this).select();});
+	$('#iPrecio' + RegCOUNT).click(function(){$(this).select();});
+	$('#iDescuento' + RegCOUNT).click(function(){$(this).select();});
+	//*****FIN SELECCION COMPLETA DE TEXTO EN CAMPOS**********
+	
+	CalculaLinea(RegCOUNT);
+
+	$('#iCantidad' + RegCOUNT).focus().select();
+}
+//**************************************************************
+
+
+//FUNCION PARA PASAR DE UN TEXTBOX A OTRO AL PRESIONAR ENTER
+function EventosTextBox(concepto, posicion){
+
+	$cambio = 1;
+
+	if ($('#iCambioF').text() != ''){
+		DevueltaAlCliente();
+	}
+
+	//SI ES ENTER MOVER HACIA EL PRECIO
+	if (event.charCode == 13 && concepto == 1)
+		$('#iPrecio' + posicion).focus().select();
+	
+	//SI ES ENTER MOVER HACIA EL DESCUENTO
+	if (event.charCode == 13 && concepto == 2)
+		$('#iDescuento' + posicion).focus().select();
+	
+	//SI ES ENTER MOVER HACIA LA BUSQUEDA DE PRODUCTOS
+	if (event.charCode == 13 && concepto == 3)
+		$('#iProd').focus().select();
+
+	if (event.charCode > 31 && (event.charCode < 48 || event.charCode > 57)) {
+        return false;
+    }
+    return true;
+}
+//************************************************************
+
+
+//FUNCION PARA ELIMINAR REGISTRO
+function EliminarReg(registroDEL){
+	$('#idItemF'+registroDEL).html('');
+	prodLS['F' + registroDEL] = '';
+}
+//**************************************************************
+
+
+//CALCULA UNA LINEA DE LA FACTURA
+function CalculaLinea(iReg){
+	defaultPrevented = false;
+
+	$('#iPrecio' + iReg).on('input',function() {CalculaNow(iReg);});
+	$('#iCantidad' + iReg).on('input',function() {CalculaNow(iReg);});
+	$('#iDescuento' + iReg).on('input',function() {CalculaNow(iReg);});
+
+	function CalculaNow(registernumber)
+	{
+		$('#idImporte' + registernumber).text(($('#iCantidad' + registernumber).val() * $('#iPrecio' + registernumber).val()) - $('#iDescuento' + registernumber).val());
+
+		CalculaTOTALES();
+	}
+}
+//**************************************************************
+
+
+//CALCULA EL BLOQUE COMPLETO DE LA FACTURA (TOTALES GENERALES)
+function CalculaTOTALES(){
+	var $t = RegCOUNT;
+	var valor = 0;
+
+	while($t > 0 )
+	{
+		valor = valor + parseInt($('#idImporte' + $t).text());
+		--$t;
+	}
+
+	$('#iTOTAL').text(valor);
+}
+//**************************************************************
+
+
+//CALCULA LA DEVUELTA EN DINERO QUE SE DEBE ENTRAR AL CLIENTE
+function DevueltaAlCliente(){
+
+	$('#iCambioF').text( $('#iPagoF').val() - parseInt($('#iTOTAL').text()) );
+}
+//**************************************************************
+
+
+//VALIDAR CAMPOS ANTES DE GUARDAR
+function ValidarCampos(){
+	valor = true
+
+	if ($('#iPagoF').val() == ''){
+		valor = false;
+	}
+
+	if (parseFloat($('#iCambioF').text()) < 0){
+		valor = false;
+	}
+
+	for(j=0; j<=RegCOUNT; j++){
+		if(parseFloat($('#iImporte' + j).text()) <= 0){
+			valor = false;
+		}
+	}
+
+	return valor;
+}
+//**************************************************************
+
 //PARA CSRF TOKEN
 function getCookie(name) {
     var cookieValue = null;
@@ -255,40 +275,122 @@ function csrfSafeMethod(method) {
 }
 //***********************************************************
 
+//FUNCION PARA APARTAR REGISTRO
+function ApartarReg(registroAP){
+
+	$('#iTOTAL').text( parseInt($('#iTOTAL').text()) - parseInt($('#idImporte' + registroAP).text()) )
+	DevueltaAlCliente();
+
+	var itemA = new Object();
+	itemA.Codigo 	= $('#iCodigo' + registroAP).text();
+	itemA.Cantidad 	= $('#iCantidad' + registroAP).val();
+	itemA.Precio 	= $('#iPrecio' + registroAP).val();
+	itemA.Descuento = $('#iDescuento' + registroAP).val();
+
+	// itemA = JSON.stringify(datos);
+	prodLS['A' + registroAP] = JSON.stringify(itemA);
+	itemsApartar = [];
+	
+	$('#idItemF' + registroAP).html('');
+
+	for(i=1; i<=RegCOUNT; i++){
+		if(prodLS['A' + i] != undefined)
+		{
+			itemAp = JSON.parse(prodLS['A' + i]);
+			itemsApartar.push(itemAp);
+		}
+	}
+
+	$dataApartar.itemsApartar = itemsApartar;
+}
+//**************************************************************
+
+
+//FUNCION PARA GUARDAR EL GRUPO DE PRODUCTOS A FACTURAR
+function ClasificarFacturados(){	
+
+	if ($cambio == 1){
+		itemsfactura = [];
+		$dataFacturar = {};
+
+		for (i=1; i<=RegCOUNT; i++){
+			Codigo 		= $('#iCodigo' + i).text();
+			Cantidad 	= $('#iCantidad' + i).val()
+			Precio 		= $('#iPrecio' + i).val();
+			Desc 		= $('#iDescuento' + i).val();
+
+			var item = new Object();
+			item.Codigo = Codigo;
+			item.Cantidad = Cantidad;
+			item.Precio = Precio;
+			item.Descuento = Desc;
+
+			itemsfactura.push(item);
+
+			// prodLS['F' + i] =  JSON.stringify();			
+			// itemsfactura.push(JSON.parse(prodLS.getItem(prodLS.key(i-1))));
+		}
+
+		$dataFacturar.itemsfactura = itemsfactura;
+		$cambio = 0;	
+	}
+}
+//**************************************************************
+
+
+//FUNCION PARA GUARDAR EL GRUPO DE PRODUCTOS APARTADOS
+function ClasificarApartados(){
+
+	for (i=0; i<prodLS.length; i++){
+		if(prodLS.key(i).substring(0,1) == 'A')
+			console.log('');
+			// $dataApartar.itemsapartar.push(prodLS.getItem(prodLS.key(i)));
+			// $dataApartar = $dataApartar + prodLS.getItem(prodLS.key(i)) + ',';
+	}
+}
+//**************************************************************
+
 
 //FUNCION PARA GUARDAR LA FACTURA
 function facturarImprimir(e){
 
-	ClasificarFacturados();
-	ClasificarApartados();
+	if(ValidarCampos()){
+		ClasificarFacturados();
+		ClasificarApartados();
+		
+		var csrftoken = getCookie('csrftoken');
 
-	
-	var csrftoken = getCookie('csrftoken');
+		$.ajaxSetup({
+		    beforeSend: function(xhr, settings) {
+		        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+		            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+		        }
+		    }
+		});
+		
+		//ENVIAR POST MEDIANTE AJAX PARA GUARDAR FACTURA EN BASE DE DATOS
+		$.ajax({
+		    type: "POST",
+		    url: "http://127.0.0.1:8000/facturar/",
+		    data: JSON.stringify({'items': $dataFacturar.itemsfactura}),
+		    contentType: 'application/json; charset=utf-8',
 
-	//var csrftoken = $.cookie('csrftoken');
+		    success: function (data) {
+		    	if (data == 1){
+		    		data = 'La factura se guardó con exito!';
+		    		$('#btnImprimir').addClass('InhabilitaBoton');
+		        	$('#iMessage').addClass('Guardado');
+		    	}
 
-	$.ajaxSetup({
-	    beforeSend: function(xhr, settings) {
-	        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-	            xhr.setRequestHeader("X-CSRFToken", csrftoken);
-	        }
-	    }
-	});
+		        $('#iMessage').text(data);
+		    }
+		});
 
+	}
+	else
+	{
+		$('#iMessage').text('Favor verificar que los campos han sido completados.').removeClass('Guardado');
 
-	$.ajax({
-	    type: "POST",
-	    url: "http://127.0.0.1:8000/facturar/",
-	    data: JSON.stringify({'items': $dataFacturar.itemsfactura}),
-	    contentType: 'application/json; charset=utf-8',
-	    // dataType: "json",
-
-	    success: function (data) {
-	        $('#iMessage').text(data);
-	    }
-	});
-	console.log(JSON.stringify({'items': JSON.stringify($dataFacturar.itemsfactura)}));
-	// $.post("/facturar/", $dataFacturar, function(returnedData) {
-	// 	$('#iMessage').text('La factura fue guardada con exito.');
-	// })
+	}
 }
+//**************************************************************

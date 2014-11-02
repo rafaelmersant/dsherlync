@@ -5,6 +5,16 @@ body{
 	padding: 0;
 }
 
+.Guardado{
+	color: blue;
+	background: yellow;
+}
+
+.InhabilitaBoton{
+	background: gray;
+
+}
+
 .MUJER{
 	background: white;
 	color: #ff00ff;
@@ -221,9 +231,9 @@ body{
 }
 
 .CellItemHeader{
-	border: 2px solid black;
+	border: 2px solid gray;
 	background: black;
-	padding: 0 0 0 0.2em;
+	padding: 0 0.5em;
 }
 
 .CellItemHeaderNumber{
@@ -237,6 +247,7 @@ body{
 
 .CellDelete{
 	padding: 0.16em 0 0 0;
+	text-align: center;
 }
 
 .DelItem{
@@ -317,5 +328,5 @@ body{
 }
 
 .factura{
-	margin: 1em 1em;
+	margin: 0.4em 1em;
 }

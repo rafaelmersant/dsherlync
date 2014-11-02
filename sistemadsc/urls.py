@@ -18,7 +18,7 @@ urlpatterns = patterns('',
     url(r'^facturas/$', 'facturas.views.index', name='Facturas'),
 
     url(r'^facturasdeldia/$', FacturasDelDia.as_view(), name='Facturas'),
-    url(r'^facturasdeldia/(?P<fecha>[\w\-]+)/$', FacturasDelDia.as_view(), name='Facturas'),
+    url(r'^facturasdeldia/(?P<Fecha>[\w\-]+)/$', FacturasDelDia.as_view(), name='Facturas'),
     url(r'^facturar/$', FacturarView.as_view(), name='Facturar'),
     url(r'^apartados/$', 'facturas.views.apartados', name='Apartados'),
 
