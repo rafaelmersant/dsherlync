@@ -7,7 +7,7 @@ from rest_framework.urlpatterns import format_suffix_patterns
 
 from productos.views import ProductoListView
 from grupos.views import GrupoListView
-from facturas.views import FacturarView, FacturasDelDia
+from facturas.views import FacturarView, FacturasDelDia, BuscarFactura
 
 urlpatterns = patterns('',
     # Examples:
@@ -17,6 +17,8 @@ urlpatterns = patterns('',
     url(r'^$', 'facturas.views.index', name='Facturas'),
     url(r'^facturas/$', 'facturas.views.index', name='Facturas'),
 
+    url(r'^buscarfactura/$', BuscarFactura.as_view(), name='Buscar Facturas'),
+    
     url(r'^facturasdeldia/$', FacturasDelDia.as_view(), name='Facturas'),
     url(r'^facturasdeldia/(?P<Fecha>[\w\-]+)/$', FacturasDelDia.as_view(), name='Facturas'),
     url(r'^facturar/$', FacturarView.as_view(), name='Facturar'),

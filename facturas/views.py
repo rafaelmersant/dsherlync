@@ -1,7 +1,11 @@
+# -*- coding: utf-8 -*-
+
 from django.shortcuts import render
 from django.http import Http404, HttpResponse, QueryDict
-from django.views.generic import View, ListView
+from django.views.generic import View, ListView, DetailView
 from django.db.models import Sum, Count
+
+from datetime import date
 
 import datetime
 
@@ -12,32 +16,35 @@ from .models import Factura, Detalle
 from productos.models import Producto
 
 
+class BuscarFactura(ListView):
+	
+	template_name = 'buscarfactura.html'
+	model = Factura
+
+
 class FacturasDelDia(ListView):
 
 	template_name = 'facturasdeldia.html'
 	model = Detalle
 
-	def get_queryset(self):
-		if self.kwargs.get('Fecha'):
-			# super(FacturasDelDia,self)
-			# queryset = super(FacturasDelDia, self).get_queryset().filter(factura=221)
-			queryset = Detalle.objects.filter(factura=21)
-			
+	def get(self, request, *args, **kwargs):
+		if self.request.GET.get('Fecha'):
+			parametro = self.request.GET.get('Fecha')
+			queryset = Detalle.objects.filter(factura__fecha__contains=parametro).annotate(totalgeneral=Sum('precio'),descuentos=Sum('descuento')).order_by('-factura__fecha')
 		else:
-			queryset = Detalle.objects.filter(factura=221)
+			queryset = Detalle.objects.values('factura_id').annotate(totalgeneral=Sum('precio'),descuentos=Sum('descuento')).order_by('-factura__fecha')
 
-			# queryset = super(FacturasDelDia, self).get_queryset().raw('select id, factura_id, sum(precio*cantidad) - descuento importeLine' 
-				# + ' from facturas_detalle group by factura_id order by factura_id desc')
-			# queryset = super(FacturasDelDia, self).get_queryset().values('factura').order_by('-factura').annotate(Sum('precio'))
+		self.object_list = queryset
+		context = self.get_context_data()
 
-		return queryset
+		return self.render_to_response(context)
 
 
 class FacturarView(View):
 
 	def get(self, request, *args, **kwargs):
 		try:
-			return HttpResponse('This is a GET para ROMPER JAJAJAJA')
+			return HttpResponse('This is a GET')
 		except Exception as e:
 			return HttpResponse(e)
 
@@ -71,7 +78,7 @@ class FacturarView(View):
 				detalle.factura = Factura.objects.get(no_factura=next_factura)
 				detalle.save()
 
-			return HttpResponse(1)
+			return HttpResponse(next_factura)
 
 		except Exception as e:
 			return HttpResponse(e)
@@ -82,21 +89,3 @@ def index(request):
 
 def apartados(request):
 	return render(request, 'apartados.html')
-
-# def AgregarFactura(request, id_factura):
-# 	if id_factura == 0:
-# 		fact = Factura.objects.get(pk=id_factura)
-# 	else:
-# 		fact = Factura.save()
-
-	
-# class AgregarFactura(request):
-
-# 	def get(self, request, descrp=None, format=None):
-# 		if descrp != None:
-# 			productos = Producto.objects.filter(descripcion__contains=descrp)	
-# 		else:
-# 			productos = Producto.objects.all()
-
-# 		response = self.serialized_producto(productos,many=True)
-# 		return Response(response.data)

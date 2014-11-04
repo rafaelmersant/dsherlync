@@ -156,7 +156,7 @@ function EventosTextBox(concepto, posicion){
 
 	$cambio = 1;
 
-	if ($('#iCambioF').text() != ''){
+	if ($('#iCambioF').text() != '' && $('#iPagoF').text() != ''){
 		DevueltaAlCliente();
 	}
 
@@ -376,9 +376,15 @@ function facturarImprimir(e){
 		    contentType: 'application/json; charset=utf-8',
 
 		    success: function (data) {
-		    	if (data == 1){
-		    		data = 'La factura se guardó con exito!';
+		    	if (data >= 1){
+
+		    		data = 'La factura '+ data +' se guardó con exito!';
+		    		
+		    		$('#btnImprimir').removeClass('AddItem');
+		    		// $('#btnImprimir').removeClass('PrintFact');
 		    		$('#btnImprimir').addClass('InhabilitaBoton');
+
+		    		$('#btnImprimir').attr('href','#');
 		        	$('#iMessage').addClass('Guardado');
 		    	}
 

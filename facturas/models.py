@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from django.db import models
 
 from productos.models import Producto
@@ -24,9 +26,9 @@ class Detalle(models.Model):
 	factura = models.ForeignKey(Factura)
 
 	def _get_total(self):
-		return '%i' % (self.cantidad * self.precio)
+		return '%i' % ((self.cantidad * self.precio) - descuento)
 
-	total = property(_get_total)
+	importe_valor = property(_get_total)
 
 	def __unicode__(self):
 		return u"%s %s" % (self.producto, (self.cantidad * self.precio))

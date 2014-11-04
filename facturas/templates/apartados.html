@@ -1,81 +1,109 @@
 {% extends 'masterpage.html' %}
 
-{% block title %} Apartados {% endblock %}
+{% block title %} Facturación {% endblock title %}
 
 {% block content %}
-
-	<section id="idApartados">
-		<section class="secApartados">
-			
-			<article class="artCliente">
-				<label for="cliente" class="LabelCliente">Cliente:</label>
-				<input type="text" name="cliente" class="ProductDescrp TextBoxes TextBoxCte" PlaceHolder="Buscar Cliente" id="iCliente" />
-				<a href="#" class="AddItem AddItemCte" id="btAddCte">Agregar Cliente</a>
-			</article>
-
-			<article class="artProducto">
-				<label for="producto" class="LabelProduct">Producto:</label>
-				<input type="text" name="producto" class="ProductDescrp TextBoxes" PlaceHolder="Buscar Producto" id="iProdCte" />
-				<a href="#" class="AddItem" id="btAddProdCte">Agregar Producto</a>
-			</article>
-		</section>	
+	<section id="idFacturacion">
 		
+		<section class="secFactura">
+			<table>
+				<tr>
+					<td>
+						<label for="cliente">Cliente:</label>			
+					</td>
+					<td>
+						<input type="text" name="cliente" class="ProductDescrp TextBoxes" PlaceHolder="Buscar Cliente" id="iCte" />			
+					</td>
+					<td>
+						<a href="#" class="AddItem" id="btNew">Nuevo</a>
+					</td>
+				</tr>
+
+				<tr >
+					<td>
+						<label for="producto">Producto:</label>
+					</td>
+					<td>
+						<input type="text" name="producto" class="ProductDescrp TextBoxes secApartados" PlaceHolder="Buscar Producto" id="iProd" />
+					</td>
+					<td>
+						<!-- <a href="#" class="AddItem" id="btNew">Nuevo</a> -->
+					</td>
+				</tr>
+			</table>
+		</section>
+
+		<table id="productosajax" class="tableSearch"> </table>
+		
+		<form action="/facturar/" method="POST">
+		{% csrf_token %}
 		<section class="secDetalle">
 			<div class="secDetalleDIV">
 			<article class="Item">
-				<table class="tableItem" id="ItemsCte">
+				<table class="tableItem HideItem" id="Items">
 					<tr class="HeaderItem">
+						<td class="CellItemHeader">
+						#						
+						</td>
 						<td class="CellItemHeader">
 						Cod. Prod.						
 						</td>
 						<td class="CellItemHeader">
 						Descripción
 						</td>
-						<td class="CellItemHeader">
+						<td class="CellItemHeader CellItemHeaderNumber">
 						Cant.						
 						</td>
-						<td class="CellItemHeader">
+						<td class="CellItemHeader CellItemHeaderNumber">
 						Precio						
 						</td>
-						<td class="CellItemHeader">
+						<td class="CellItemHeader CellItemHeaderNumber">
 						Desc.						
 						</td>
-						<td class="CellItemHeader">
+						<td class="CellItemHeader CellItemHeaderNumber">
 						Importe						
 						</td>
-						<td class="HeaderDelete CellItemHeader" id="idHeaderDelete">
-							
+						<td class="CellItemHeader" id="idHeaderDelete">
+						Quitar
+						</td>
+						<td class="CellItemHeader" id="idHeaderApartar">
+						Apartar
 						</td>
 					</tr>
-					<tr class="DetailsItem" id="idItem">
-						<td class="CellItemDetail dCod"> xxxx</td>
-						<td class="CellItemDetail dDescrp"> xxxxxxxxxxxxxxxxxxxxxxxx</td>
-						<td class="CellItemDetail dCant"> <input name="cant" type="text" class="TextBoxes TextItems" PlaceHolder="0.00"/> </td>
-						<td class="CellItemDetail dPrecio"> <input name="cant" type="text" class="TextBoxes TextItems" PlaceHolder="0.00"/></td>
-						<td class="CellItemDetail dDesc"> <input name="cant" type="text" class="TextBoxes TextItems" PlaceHolder="0.00"/> </td>
-						<td class="CellItemDetail dImporte"> 0.00 </td>
-						<td class="CellDelete CellItemDetail" id="idDelete"><a href="#" class="DelItem icon-delete"> </a> </td>
-					</tr>
 					
-				</table>
+					
+			</table>
+		</form>
 				<table class="tTotals">
 					<tr>
 						<td> Total: </td>
-						<td> <p class="Totals">12,000.52 </p></td>
+						<td> <p class="Totals" id="iTOTAL">0.00</p></td>
 					</tr>
 					<tr>
 						<td>Pago:</td>
-						<td> <p class="Totals"><input name="cant" type="text" class="Totals" PlaceHolder="0.00"/> </p></td>
+						<td> <p class="Pago"><input id="iPagoF" name="cant" type="text" class="Totals Pago" PlaceHolder="0.00"/> </p></td>
 					</tr>
 					<tr>
 						<td>Cambio:</td>
-						<td> <p class="Totals">12,000.52 </p></td>
+						<td> <p class="Totals" id="iCambioF">0.00</p></td>
+					</tr>
+					<tr>
+						<td> </td>
+						<td>
+							<p>
+							<a href="javascript:facturarImprimir();" class="AddItem PrintFact" id="btnImprimir">Imprimir </a>
+							<!-- <input type="submit" value="Imprimir" class="AddItem PrintFact" /> -->
+
+							</p>
+						</td>
 					</tr>
 				</table>
-				<a href="#" class="AddItem PrintFact">Imprimir </a>
+							 <p id="pMessaje1"> <div> <span id="iMessage" class="clsMessage">  </span> </div> </p>
+							 <p id="pMessaje"> <div> <span id="iMessage" class="clsMessage">  </span> </div> </p>
+
 			</article>
 		</div>	
 		</section>
-
 	</section>
-{% endblock %}
+
+{% endblock content %}

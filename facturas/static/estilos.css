@@ -8,11 +8,25 @@ body{
 .Guardado{
 	color: blue;
 	background: yellow;
+	font-size: 28px;
 }
 
+.linea{
+	height: 3px;
+	background: lightgray;
+	width: 97%;
+	margin: 1em auto;
+}
 .InhabilitaBoton{
-	background: gray;
-
+	background: lightgray;
+	border-radius: 0.9em;
+	box-shadow: rgba(0,0,0,0.5) 2px 2px 20px;
+	font-style: italic;
+	padding: 0.5em 2.2em 0.5em 2.2em;
+	text-decoration: none;
+	text-shadow: rgba(0,0,0,0.5) 2px 2px 5px;
+	color: black;
+	margin: 2em 0.2em;
 }
 
 .MUJER{
@@ -196,18 +210,22 @@ body{
 
 .AddItem{
 	background: #BB00EA;
-	border-radius: 0.3em;
+	border-radius: 0.9em;
 	box-shadow: rgba(0,0,0,0.5) 2px 2px 20px;
 	font-style: italic;
-	padding: 0.4em 2.2em 0.4em 2.2em;
+	padding: 0.5em 2.2em 0.5em 2.2em;
 	text-decoration: none;
 	text-shadow: rgba(0,0,0,0.5) 2px 2px 5px;
 	color: white;
 	margin: 2em 0.2em;
 }
 
-.secFactura,.secApartados{
+.secFactura{
 	margin: 3em 0 0 1em;
+}
+
+.secApartados{
+	margin: 0.5em 0;
 }
 
 .secDetalle{
@@ -329,4 +347,18 @@ body{
 
 .factura{
 	margin: 0.4em 1em;
+}
+
+.margenesTitle{
+	padding: 0.2em 0.3em  0 1em;
+	text-align: right;
+	font-weight: bold;
+	border: 2px solid black;
+}
+
+.margenesRow{
+	padding: 0.4em 0.2em;
+	text-align: right;
+	border: 2px solid gray;
+
 }

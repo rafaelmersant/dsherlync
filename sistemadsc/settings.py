@@ -40,7 +40,9 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
     'rest_framework',
+    'mathfilters',
     'productos',
     'facturas',
     'clasificaciones',
@@ -86,7 +88,7 @@ DATABASES = {
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
 
-LANGUAGE_CODE = 'es'
+LANGUAGE_CODE = 'es-DO'
 
 TIME_ZONE = 'UTC'
 

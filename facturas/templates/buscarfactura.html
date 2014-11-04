@@ -1,0 +1,44 @@
+{% extends 'masterpage.html' %}
+
+{% block title %} Buscar Facturas {% endblock title %}
+
+{% block content %}
+
+{% load mathfilters %}
+{% load humanize %}
+
+<section>
+	<br>
+	
+	<form action="" method="get" >
+	<div class="factura"> Buscar Factura: <input id="Factura" name="Factura" type="text" PlaceHolder="Factura"/> <input type="submit" class="AddItem PrintFact" value="Buscar"> </div> 
+	</form>
+
+	<div class="linea">
+			
+	</div>
+
+	<table class="factura">
+		<tr>
+			<td class="margenesTitle">Producto </td> 
+			<td class="margenesTitle">Cantidad </td>  
+			<td class="margenesTitle">Precio </td>  
+			<td class="margenesTitle">Descuento </td>  
+		</tr>
+
+		{% for factura in object_list %}
+		<tr>
+			<td class="margenesRow"> {{ factura.no_factura }} </td> 
+			<td class="margenesRow"> {{ factura.no_factura }} </td> 
+			<td class="margenesRow"> {{ factura.no_factura }} </td> 
+			<td class="margenesRow"> {{ factura.no_factura }} </td> 
+		</td>
+		</tr>
+		{% empty %}
+			<p class="factura" >NO EXISTEN FACTURAS PARA LA FECHA ESPECIFICADA</p>
+		{% endfor %}
+	</table>
+
+</section>
+
+{% endblock content %}
