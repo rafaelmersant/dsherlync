@@ -6,6 +6,7 @@ admin.autodiscover()
 from rest_framework.urlpatterns import format_suffix_patterns
 
 from productos.views import ProductoListView
+from clientes.views import ClienteListView
 from grupos.views import GrupoListView
 from facturas.views import FacturarView, FacturasDelDia, BuscarFactura
 
@@ -30,6 +31,9 @@ urlpatterns = patterns('',
     #API
     url(r'^api/productos/$', ProductoListView.as_view()),
     url(r'^api/productos/(?P<descrp>[\w\s]+)/$', ProductoListView.as_view()),
+    
+    url(r'^api/clientes/$', ClienteListView.as_view()),
+    url(r'^api/clientes/(?P<nombre>[\w\s]+)/$', ClienteListView.as_view()),
 
     url(r'^api/grupos/$', GrupoListView.as_view()),
     url(r'^api/grupos/(?P<pk>\w+)/$', GrupoListView.as_view()),

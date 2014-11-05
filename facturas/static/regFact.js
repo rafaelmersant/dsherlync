@@ -10,6 +10,7 @@ var itemsApartar = [];
 
 // VARIABLE PARA EL CONTENIDO DE LA TABLA DE PRODUCTOS
 var contenido = $('#productosajax');
+var contenido2 = $('#clientesajax');
 
 //*****************************************************************************************************
 //*****************************************************************************************************
@@ -23,8 +24,12 @@ $(document).ready(function() {
 	// VARIABLE QUE CONTIENE TODOS LOS PRODUCTOS EN UNA TUPLA
 	prodLS = localStorage;
 	RegCOUNT = 0;
-})
 
+});
+
+$(function(){
+	$('#idFecha').datepicker();
+	});
 
 // SELECCIONAR TEXTO COMPLETO CUANDO ENTRA EL FOCUS
 $('#iProd').click(function () {
@@ -100,6 +105,31 @@ $('#iProd').on('input', function(e){
 		});
 });
 
+// FUNCION PARA BUSCAR CLIENTES EN LA API Y DIBUJAR LA TABLA CON LOS CLIENTES ENCONTRADOS
+$('#iCte').on('input', function(e){
+	e.defaultPrevented = false;
+
+	$.getJSON('http://127.0.0.1:8000/api/clientes/' + $('#iCte').val() +'/?format=json',
+		function(data) {
+			contenido2.html('');
+
+			$.each(data, function(index, element) {
+				contenido2.append(
+					// '<tr class="DetailsItemSearch" id=\"' + RegCOUNT +'\">' + 
+					'<tr class="DetailsItemSearch" id=' + RegCOUNT +'>' + 
+					'<td id="idCod" class="CellItemDetailSearch">' + element['id'] +'</td>' +					
+					'<td id="idNombre" class="CellItemDetailSearch">'
+						+'<a href="javascript:void(0);" class="clsCte"' 	
+						+'onclick="agregarCliente(&quot;' 
+							+ element['id'] + '&quot;, &quot;' 
+							+ element['nombre'] + '&quot;); return false;">' + element['nombre'] +'</a></td>' +
+					'</tr>'
+					);
+			})
+			contenido2.hide();
+			contenido2.fadeIn('low');
+		});
+});
 //*****************************************************************************************************
 //*****************************************************************************************************
 //FIN DE EVENTOS

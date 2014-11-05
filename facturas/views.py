@@ -5,9 +5,7 @@ from django.http import Http404, HttpResponse, QueryDict
 from django.views.generic import View, ListView, DetailView
 from django.db.models import Sum, Count
 
-from datetime import date
-
-import datetime
+from datetime import date, datetime
 
 import json
 import math
@@ -30,7 +28,16 @@ class FacturasDelDia(ListView):
 	def get(self, request, *args, **kwargs):
 		if self.request.GET.get('Fecha'):
 			parametro = self.request.GET.get('Fecha')
-			queryset = Detalle.objects.filter(factura__fecha__contains=parametro).annotate(totalgeneral=Sum('precio'),descuentos=Sum('descuento')).order_by('-factura__fecha')
+
+			fecha = datetime.strptime(parametro, '%m/%d/%Y')
+
+			dia  = fecha.day
+			mes  = fecha.month
+			anio = fecha.year
+
+			queryset = Detalle.objects.values('factura_id').filter(factura__fecha__day=dia,
+											  factura__fecha__month=mes,
+											  factura__fecha__year=anio).annotate(totalgeneral=Sum('precio'),descuentos=Sum('descuento')).order_by('-factura__fecha')
 		else:
 			queryset = Detalle.objects.values('factura_id').annotate(totalgeneral=Sum('precio'),descuentos=Sum('descuento')).order_by('-factura__fecha')
 
