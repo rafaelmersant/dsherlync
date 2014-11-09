@@ -1,0 +1,26 @@
+{% extends 'masterpage.html' %}
+
+{% block title %} Inventario {% endblock title %}
+
+{% block content %}
+
+{% load mathfilters %}
+{% load humanize %}
+
+<section class="InventarioSection">
+
+	<form method="POST" action="">
+		{% csrf_token %}
+		<div class="margenLeft">
+			{{ form.as_p }}		
+		</div>
+
+		<div class="margenLeft">
+			<input class="AddItem PrintFact" type="submit" value="Guardar"/>
+			
+		</div>
+	</form>
+	
+</section>
+
+{% endblock content %}

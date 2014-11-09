@@ -7,12 +7,24 @@ from datetime import datetime, timedelta
 class Apartado(models.Model):
 	estatus_choices = (('A','Activo'),('X','Anulado'))
 
-	fecha = models.DateTimeField(auto_now_add=True)
+	fecha = models.DateField(auto_now_add=True)
 	cliente = models.ForeignKey(Cliente)
 	producto = models.ForeignKey(Producto)
 	cantidad = models.PositiveIntegerField()
-	precio = models.DecimalField(max_digits=8, decimal_places=2)
-	fecha_vence = models.DateTimeField(default=datetime.now()+timedelta(days=15))
+	precio = models.DecimalField(max_digits=8, decimal_places=2, blank=True)
+	fecha_vence = models.DateField(default=datetime.now()+timedelta(days=15))
+	estatus = models.CharField(max_length=1, choices=estatus_choices,
+							   default=estatus_choices[0][0])
 
-	def __unicode__(self):
-		return "Producto: %s - Cantidad: " % (self.producto.descripcion, self.cantidad)
+
+class DeudaCliente(models.Model):
+
+	cliente = models.ForeignKey(Cliente)
+	deuda = models.DecimalField(max_digits=8, decimal_places=2)
+
+
+class AbonoCliente(models.Model):
+
+	cliente = models.ForeignKey(Cliente)
+	abono = models.DecimalField(max_digits=8, decimal_places=2)
+	fecha = models.DateField(auto_now_add=True)

@@ -8,17 +8,18 @@
 		<section class="secFactura">
 			<table>
 				<tr>
-					<td>
+					<td class="clsCte">
 						<label for="cliente">Cliente:</label>			
 					</td>
 					<td>
-						<input type="text" name="cliente" class="ProductDescrp TextBoxes" PlaceHolder="Buscar Cliente" id="iCte" />			
+						<input type="text" name="cliente" class="ProductDescrp TextBoxes clsCte" PlaceHolder="Buscar Cliente" id="iCte" />	
+						<span class="icon-uniE601 search-iconProd"> </span>		
 					</td>
 					<td>
-						<a href="#" class="AddItem" id="btNew">Nuevo</a>
+						<a href="javascript:return false;" class="AddItem" id="btNewCte">Nuevo</a>
 					</td>
 				</tr>
-				<table id="clientesajax" class="tableSearch"> </table>
+				<table id="clientesajax" class="tableSearchCte"> </table>
 
 				<tr >
 					<td>
@@ -26,15 +27,28 @@
 					</td>
 					<td>
 						<input type="text" name="producto" class="ProductDescrp TextBoxes secApartados" PlaceHolder="Buscar Producto" id="iProd" />
+						<span class="icon-uniE601 search-icon2"> </span>
 					</td>
 					<td>
 						<!-- <a href="#" class="AddItem" id="btNew">Nuevo</a> -->
 					</td>
 				</tr>
-			</table>
+			</table>			
 		</section>
-
 		<table id="productosajax" class="tableSearch"> </table>
+
+		<section class="secCliente">
+		 	<div class="nuevoCliente" id="clienteForm">
+		 		<form method="POST" action=""> 
+		 			{% csrf_token %}
+		 			<p class="cliente"> Nuevo Cliente</p>
+		 			<a href="#" class="cerrarCte" id="btcerrarCte"> X </a>
+		 			<p class="Cte"> Nombre: </p> <p class="tCte"> <input type="text" id="id_nombre" name="nombre" required oninvalid="this.setCustomValidity('Favor digitar un nombre')" oninput="setCustomValidity('')"/> </p> 
+		 			<p class="Cte"> Telefono: </p> <p class="tCte"> <input type="text" id="id_telefono" name="telefono" required oninvalid="this.setCustomValidity('Favor digitar un telefono')" oninput="setCustomValidity('')"/> </p>
+		 			<p> <input type="submit" value="Guardar Cliente" class="guardarCliente"> </p>
+		 		</form>
+		 	</div>
+		</section>
 		
 		<form action="/facturar/" method="POST">
 		{% csrf_token %}
@@ -92,7 +106,7 @@
 						<td> </td>
 						<td>
 							<p>
-							<a href="javascript:facturarImprimir();" class="AddItem PrintFact" id="btnImprimir">Imprimir </a>
+							<a href="javascript:ApartarProductos();" class="AddItem PrintFact" id="btnApartar">Apartar </a>
 							<!-- <input type="submit" value="Imprimir" class="AddItem PrintFact" /> -->
 
 							</p>

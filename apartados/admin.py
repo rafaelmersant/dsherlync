@@ -1,3 +1,8 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import Apartado
+
+class ApartadoAdmin(admin.ModelAdmin):
+	list_display = ['id','cliente','producto','cantidad','precio','fecha','fecha_vence']
+
+admin.site.register(Apartado,ApartadoAdmin)

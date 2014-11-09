@@ -2,7 +2,7 @@
 
 from django.shortcuts import render
 from django.http import Http404, HttpResponse, QueryDict
-from django.views.generic import View, ListView, DetailView
+from django.views.generic import View, ListView, DetailView, TemplateView
 from django.db.models import Sum, Count
 
 from datetime import date, datetime
@@ -13,6 +13,11 @@ import math
 from .models import Factura, Detalle
 from productos.models import Producto
 
+
+class Reportes(TemplateView):
+	
+	template_name = 'reportes.html'
+	
 
 class BuscarFactura(ListView):
 	

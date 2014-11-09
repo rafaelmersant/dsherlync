@@ -18,7 +18,9 @@
 			
 	</div>
 
-	<table class="factura">
+	{% if object_list %}
+
+	<table class="factura" id="iDetalle">
 		<tr>
 			<td class="margenesTitle">No. Factura </td> 
 			<td class="margenesTitle">Total </td>  
@@ -31,10 +33,13 @@
 		</td>
 		</tr>
 		{% empty %}
-			<p class="factura" >NO EXISTEN FACTURAS PARA LA FECHA ESPECIFICADA</p>
+			
 		{% endfor %}
 	</table>
+	{% else %}
+		<p class="factura" >NO EXISTEN FACTURAS PARA LA FECHA ESPECIFICADA</p>
 
+	{% endif %}
 </section>
 
 {% endblock content %}

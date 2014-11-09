@@ -5,11 +5,118 @@ body{
 	padding: 0;
 }
 
+/* FORMULARIO DE INVENTARIO */
+.InventarioSection label{
+	color: black;
+}
+.InventarioSection #id_fecha_entrada{
+	width: 6em;
+}
+.InventarioSection #id_descripcion_salida{
+	width: 20em;
+}
+.InventarioSection #id_cantidad{
+	width: 4em;
+}
+.errorlist li{
+	color: red;
+}
+.margenLeft{
+	margin-left: 1em;
+}
+/*+++++++++++++++++++++++++++++++++++++++*/
+
+.secCliente{
+	position: relative;
+	float: right;
+	top: 1.5em;
+	right: 3em;
+}
+.cerrarCte{
+	color: black;
+	float: right;
+	font-size: 1.5em;
+	margin-right: 0.5em;
+	position: absolute;
+	right: 0;
+	text-decoration: none;
+	top: 0.9em;
+}
+.cerrarCte:hover{
+	color: yellow;
+}
+.cliente{
+	border-radius: 15px 15px 0 0px;
+	background: #FF44FA;
+	color: white;
+	padding: .5em 0 .5em .5em;
+	height: 1.3em;
+}
+.Cte{
+	display: inline-block;
+	margin: 0 0.5em 1em 1em;
+}
+.tCte{
+	display: inline-block;
+	margin: 0 0.5em 1em 0em;
+}
+.nuevoCliente{
+	display: none;
+	background: lightgray;
+	border-radius: 15px 15px 0 0px;
+
+}
+.guardarCliente{
+	margin: 0 0 .4em .8em;
+	padding: 0.5em 13.5em;
+}
+.guardarCliente:hover{
+	background: #BB00EA;
+	color: white;
+}
+.nuevoClienteForm{
+	display: block;
+}
+.usuario{
+	float: right;
+	margin-right: 1em;
+	color: #990099;
+	font-style: italic;
+	font-size: 0.8em;
+}
+.reportes{
+	margin: 3em 0 0 0;
+}
+.reporteItem{
+	width: 300px;
+}
+.margenTop{
+	margin-top: 2.1em;
+}
+.displaynone{
+	display: none;
+}
+.margenNoExiste{
+	margin: 1em;
+	color: red;
+	font-weight: bold;
+}
+
+.clsCte{
+	padding-left: 1em;
+}
 .search-iconProd{
 	font-size: 1.2em;
 	position: absolute;
 	right: 7.2em;
 	top: .35em;
+	color: #ccc;
+}
+.search-icon2{
+	font-size: 1.2em;
+	position: absolute;
+	right: 7.2em;
+	top: 2.65em;
 	color: #ccc;
 }
 .Guardado{
@@ -63,11 +170,24 @@ body{
 	width: 30%;
 }
 .tableSearch{
-	background: lightblue;
 	border-radius: 1.4em 0 1.4em 0;
 	border: 2px solid #333333;
-	width: 100%;
-	
+	background: white;
+	margin: 0;
+
+}
+.tableSearchCte{
+	border: 2px solid #333333;
+	position: absolute;
+	left: 4.5em;
+	background: white;
+	margin-top: .2em;
+	width: 390px;
+}
+
+.idCodCte{
+	width: 2em;
+	text-align: center;
 }
 .DetailsItemSearch{
 	border-radius: 1.4em 0 1.4em 0;
@@ -119,7 +239,7 @@ body{
 }
 .LogoImg:hover{
 	-webkit-transform: rotate(360deg);
-	-webkit-transition: 1s;
+	-webkit-transition: .3s;
 
 }
 
@@ -152,7 +272,7 @@ body{
 	color: white;
 	font-size: 18px;
 }
-.clsFacturar{
+.clsItemMenu{
 	display: block;
 	text-decoration: none;
 	color: white;
@@ -160,9 +280,9 @@ body{
 	margin: 0;
 	font:bold;
 	-webkit-transform: scale(23deg);
-	-webkit-transition: .7s;
+	-webkit-transition: .3s;
 }
-.clsFacturar:hover{
+.clsItemMenu:hover{
 	background: #B226AF;
 	color: #82FF44;
 }
@@ -174,7 +294,7 @@ body{
 	right: 0;
 	top:-0.4em;
 	-webkit-transform: scale(23deg);
-	-webkit-transition: .7s;
+	-webkit-transition: .3s;
 }
 .UlMenu li:last-child a{
 	background: #BB00EA;
@@ -227,6 +347,7 @@ body{
 	text-shadow: rgba(0,0,0,0.5) 2px 2px 5px;
 	color: white;
 	margin: 2em 0.2em;
+	outline: none;
 }
 
 .secFactura{
@@ -236,7 +357,8 @@ body{
 }
 
 .secApartados{
-	margin: 0.5em 0;
+	margin: 0.5em 0 0 0;
+	position: static;
 }
 
 .secDetalle{
@@ -325,9 +447,6 @@ body{
 	border: 0;
 }
 
-.secApartados{
-	display: inline-block;
-}
 .artProducto{
 	display: block;
 	margin: 0.5em 0 0 0;

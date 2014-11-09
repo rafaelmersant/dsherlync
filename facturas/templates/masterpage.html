@@ -21,15 +21,18 @@
 			<img class="LogoImg" src={% static "Logo.png" %} alt="Logo" />		
 		</figure>	
 		<p class="TitleSystem"> Sistema de Facturación para D' Sherlyn Closet </p>
+
+		<p class="usuario"> Usuario: {{ user }} </p>
 	</header>
 	</div>
 
 		<nav class="Menu">
 			<ul class="UlMenu">
-				<li> <a class="clsFacturar" id="BtFacturar" href="/facturas">Facturar</a></li>
-				<li> <a class="clsFacturar" id="BtApartar" href="/apartados">Apartar</a></li>
-				<li> <a class="clsFacturar" id="BtReporte" href="/facturasdeldia">Reporte Ventas</a></li>
-				<li> <a class="clsFacturar" id="BtReporte2" href="/buscarfactura">Consultar Factura</a></li>
+				<li> <a class="clsItemMenu" id="BtFacturar" href="/facturas">Facturar</a></li>
+				<li> <a class="clsItemMenu" id="BtApartar" href="/apartados">Apartar</a></li>
+				<li> <a class="clsItemMenu" id="BtReporte" href="/reportes">Reportes</a></li>
+				<li> <a class="clsItemMenu" id="BtBFactura" href="/buscarfactura">Buscar Factura</a></li>
+				<li> <a class="clsItemMenu" id="BtInventario" href="/inventario">Inventario</a></li>
 
 				<li> <a class="clsAdministrar" href="http://127.0.0.1:8000/admin">Administrar </a></li>
 			</ul>

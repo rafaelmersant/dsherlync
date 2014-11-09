@@ -25,10 +25,20 @@ $(document).ready(function() {
 	prodLS = localStorage;
 	RegCOUNT = 0;
 
+	if(window.location.pathname == '/apartados/'){
+		prodLS['display'] = 'displaynone';
+		$('#idHeaderApartar').addClass(prodLS['display']);
+	}
+	else{
+		prodLS['display'] = '';
+	}
 });
+
 
 $(function(){
 	$('#idFecha').datepicker();
+	$('#id_fecha_entrada').datepicker();
+
 	});
 
 // SELECCIONAR TEXTO COMPLETO CUANDO ENTRA EL FOCUS
@@ -41,12 +51,38 @@ $('#iProd').blur(function(){
 	$('#productosajax').fadeOut('fast');
 });
 
+// SELECCIONAR TEXTO COMPLETO CUANDO ENTRA EL FOCUS PARA CLIENTES
+$('#iCte').click(function () {
+   $(this).select();
+});
+
+// CUANDO SEA QUITADO EL FOCUS DE LA BUSQUEDAD DE CLIENTES
+$('#iCte').blur(function(){
+	$('#clientesajax').fadeOut('fast');
+});
+
+
 // FUNCION DEL BOTON AGREGAR
 $('#btNew').click(function(){
 	location.reload();
 	$('#btnImprimir').removeClass('InhabilitaBoton');
 
 });
+
+// FUNCION DEL BOTON AGREGAR CLIENTE
+$('#btNewCte').click(function(){
+	$('#clienteForm').toggleClass('nuevoClienteForm');
+	$('#id_nombre').val($('#iCte').val());
+	$('#id_telefono').focus();
+});
+
+// FUNCION DEL BOTON AGREGAR CLIENTE
+$('#btcerrarCte').click(function(){
+	$('#clienteForm').toggleClass('nuevoClienteForm');
+});
+
+
+
 
 //CADA VEZ QUE SE DIGITE EN EL PRECIO DE CUALQUIER LINEA SE RECALCULE
 $('#iPrecio').on('input',CalculaLinea);
@@ -80,55 +116,80 @@ $('#iPagoF').on('keypress', function(e) {
 $('#iProd').on('input', function(e){
 	e.defaultPrevented = false;
 
-	$.getJSON('http://127.0.0.1:8000/api/productos/' + $('#iProd').val() +'/?format=json',
-		function(data) {
+	$.ajax({
+        type: "GET",
+        url: 'http://127.0.0.1:8000/api/productos/' + $('#iProd').val() +'/?format=json',
+        dataType: "json",
+        success: function(data) {
 			contenido.html('');
 
-			$.each(data, function(index, element) {
-				contenido.append(
-					// '<tr class="DetailsItemSearch" id=\"' + RegCOUNT +'\">' + 
-					'<tr class="DetailsItemSearch" id=' + RegCOUNT +'>' + 
-					'<td id="idCod" class="CellItemDetailSearch '+ element['departamento'] +'">' + element['codigo'] +'</td>' +					
-					'<td id="idDescrp" class="CellItemDetailSearch '+ element['departamento'] +'">'
-						+'<a href="javascript:void(0);" class="'+ element['departamento'] + '"' 	
-						+'onclick="agregarProducto(&quot;' 
-							+ element['codigo'] + '&quot;, &quot;' 
-							+ element['descripcion'] + '&quot;, &quot;'
-							+ element['departamento'] + '&quot;, &quot;'
-							+ element['precio'] + '&quot;); return false;">' + element['descripcion'] +'</a></td>' +
-					'<td id="idPrecio" class="CellItemDetailSearchRight '+ element['departamento'] +'">' + element['precio'] +'</td>' +
-					'</tr>'
-					);
-			})
+			if (data.length > 0){
+				$.each(data, function(index, element) {
+					contenido.append(
+						// '<tr class="DetailsItemSearch" id=\"' + RegCOUNT +'\">' + 
+						'<tr class="DetailsItemSearch" id=' + RegCOUNT +'>' + 
+						'<td id="idCod" class="CellItemDetailSearch '+ element['departamento'] +'">' + element['codigo'] +'</td>' +					
+						'<td id="idDescrp" class="CellItemDetailSearch '+ element['departamento'] +'">'
+							+'<a href="javascript:void(0);" class="'+ element['departamento'] + '"' 	
+							+'onclick="agregarProducto(&quot;' 
+								+ element['codigo'] + '&quot;, &quot;' 
+								+ element['descripcion'] + '&quot;, &quot;'
+								+ element['departamento'] + '&quot;, &quot;'
+								+ element['precio'] + '&quot;); return false;">' + element['descripcion'] +'</a></td>' +
+						'<td id="idPrecio" class="CellItemDetailSearchRight '+ element['departamento'] +'">' + element['precio'] +'</td>' +
+						'</tr>'
+						);
+				});
+			}
+			else{
+				contenido.html('<p class="margenNoExiste"> NO EXISTE EL PRODUCTO ESPECIFICADO. </p>');
+			}
+
 			contenido.hide();
 			contenido.fadeIn('fast');
-		});
+		},
+        error: function(response) {
+			contenido.html('<p class="margenNoExiste"> NO EXISTE EL CLIENTE ESPECIFICADO. </p>');
+        }
+	});
 });
 
 // FUNCION PARA BUSCAR CLIENTES EN LA API Y DIBUJAR LA TABLA CON LOS CLIENTES ENCONTRADOS
 $('#iCte').on('input', function(e){
 	e.defaultPrevented = false;
 
-	$.getJSON('http://127.0.0.1:8000/api/clientes/' + $('#iCte').val() +'/?format=json',
-		function(data) {
+	$.ajax({
+        type: "GET",
+        url: 'http://127.0.0.1:8000/api/clientes/' + $('#iCte').val() +'/?format=json',
+        dataType: "json",
+        success: function(data) {
 			contenido2.html('');
 
-			$.each(data, function(index, element) {
-				contenido2.append(
-					// '<tr class="DetailsItemSearch" id=\"' + RegCOUNT +'\">' + 
-					'<tr class="DetailsItemSearch" id=' + RegCOUNT +'>' + 
-					'<td id="idCod" class="CellItemDetailSearch">' + element['id'] +'</td>' +					
-					'<td id="idNombre" class="CellItemDetailSearch">'
-						+'<a href="javascript:void(0);" class="clsCte"' 	
-						+'onclick="agregarCliente(&quot;' 
-							+ element['id'] + '&quot;, &quot;' 
-							+ element['nombre'] + '&quot;); return false;">' + element['nombre'] +'</a></td>' +
-					'</tr>'
-					);
-			})
+			if (data.length > 0){
+				$.each(data, function(index, element) {
+					contenido2.append(
+						'<tr class="DetailsItemSearch" id=' + RegCOUNT +'>' + 
+						'<td id="idCod" class="CellItemDetailSearch idCodCte">' + element['id'] +'</td>' +					
+						'<td id="idNombre" class="CellItemDetailSearch">'
+							+'<a href="javascript:void(0);" class="clsCte"' 	
+							+'onclick="agregarCliente(&quot;' 
+								+ element['id'] + '&quot;, &quot;' 
+								+ element['nombre'] + '&quot;); return false;">' + element['nombre'] +'</a></td>' +
+						'</tr>'
+						);
+				});
+			}
+			else{
+				contenido2.html('<p class="margenNoExiste"> NO EXISTE EL CLIENTE ESPECIFICADO. </p>');
+			}
+
 			contenido2.hide();
 			contenido2.fadeIn('low');
-		});
+		},
+        error: function(response) {
+			contenido2.html('<p class="margenNoExiste"> NO EXISTE EL CLIENTE ESPECIFICADO. </p>');
+        }
+	});
 });
 //*****************************************************************************************************
 //*****************************************************************************************************
@@ -164,7 +225,7 @@ function agregarProducto(codigo, descrp, departamento, varprecio){
 						'<td class="CellItemDetail ' + departamento + ' dDesc"> <input id="iDescuento'+ RegCOUNT +'" onkeypress="return EventosTextBox(3,'+ RegCOUNT+');" type="text" value="0.00" class="TextBoxes TextItems" PlaceHolder="0.00"/> </td>' +
 						'<td class="CellItemDetail ' + departamento + ' dImporte"> <span id="idImporte'+ RegCOUNT +'"> 0.00 </span> </td>' +
 						'<td class="CellDelete CellItemDetail" id="idDelete'+ RegCOUNT +'"><a href="javascript:EliminarReg(' + RegCOUNT + ')" class="DelItem icon-delete"> </a> </td>' +
-						'<td class="CellDelete CellItemDetail" id="idApartar'+ RegCOUNT +'"><a href="javascript:ApartarReg('+ RegCOUNT +')" class="ApartarItem icon-spinner"> </a> </td>' +
+						'<td class="CellDelete CellItemDetail '+ prodLS['display'] +'" id="idApartar'+ RegCOUNT +'"><a href="javascript:ApartarReg('+ RegCOUNT +')" class="ApartarItem icon-spinner"> </a> </td>' +
 					'</tr>').hide().fadeIn('fast');
 
 
@@ -177,6 +238,14 @@ function agregarProducto(codigo, descrp, departamento, varprecio){
 	CalculaLinea(RegCOUNT);
 
 	$('#iCantidad' + RegCOUNT).focus().select();
+}
+//**************************************************************
+
+// FUNCION PARA SELECCIONAR UN CLIENTE
+function agregarCliente(codigo, nombre){
+
+	$('#iCte').val(nombre);
+	prodLS['Cliente'] = codigo;
 }
 //**************************************************************
 
@@ -281,6 +350,21 @@ function ValidarCampos(){
 	return valor;
 }
 //**************************************************************
+
+//VALIDAR CAMPOS ANTES DE GUARDAR
+function ValidarCamposApartados(){
+	valor = true
+
+	for(j=0; j<=RegCOUNT; j++){
+		if(parseFloat($('#iImporte' + j).text()) <= 0){
+			valor = false;
+		}
+	}
+
+	return valor;
+}
+//**************************************************************
+
 
 //PARA CSRF TOKEN
 function getCookie(name) {
@@ -421,6 +505,61 @@ function facturarImprimir(e){
 		        $('#iMessage').text(data);
 		    }
 		});
+
+	}
+	else
+	{
+		$('#iMessage').text('Favor verificar que los campos han sido completados.').removeClass('Guardado');
+
+	}
+}
+//**************************************************************
+
+//FUNCION PARA GUARDAR PRODUCTOS APARTADOS
+function ApartarProductos(e){
+
+	if(ValidarCamposApartados()){
+		//ClasificarFacturados();
+		//ClasificarApartados();
+		
+		var csrftoken = getCookie('csrftoken');
+
+		$.ajaxSetup({
+		    beforeSend: function(xhr, settings) {
+		        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+		            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+		        }
+		    }
+		});
+		
+		//ENVIAR POST MEDIANTE AJAX PARA GUARDAR FACTURA EN BASE DE DATOS
+		$.ajax({
+		    type: "POST",
+		    url: "http://127.0.0.1:8000/apartados/",
+		    data: JSON.stringify({'items': $dataFacturar.itemsfactura, 'cliente': prodLS['cliente']}),
+		    contentType: 'application/json; charset=utf-8',
+
+		    success: function (data) {
+		    	// if (data >= 1){
+
+		    	// 	data = 'La factura '+ data +' se guardó con exito!';
+		    		
+		    	// 	$('#btnImprimir').removeClass('AddItem');
+		    	// 	// $('#btnImprimir').removeClass('PrintFact');
+		    	// 	$('#btnImprimir').addClass('InhabilitaBoton');
+
+		    	// 	$('#btnImprimir').attr('href','#');
+		     	//  $('#iMessage').addClass('Guardado');
+		     	//	$('#iMessage').text(data);
+		    	//}
+
+		        $('#iMessage').text(data);
+
+		    }
+		});
+
+		        console.log(JSON.stringify({'items': $dataFacturar.itemsfactura, 'cliente': prodLS['cliente']}));
+
 
 	}
 	else
