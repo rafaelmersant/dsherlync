@@ -5,6 +5,8 @@ from django.http import Http404, HttpResponse, QueryDict
 from django.views.generic import View, ListView, DetailView, TemplateView
 from django.db.models import Sum, Count
 
+from inventarios.models import Movimiento, Existencia
+
 from datetime import date, datetime
 
 import json
@@ -65,7 +67,6 @@ class FacturarView(View):
 		try:
 
 			data = json.loads(request.body)
-			items = request.body
 
 			next_factura = Factura.objects.latest('pk').no_factura + 1
 			
@@ -75,7 +76,7 @@ class FacturarView(View):
 			
 			for item in data['items']:
 				codigo = item['Codigo'].strip()
-				cantidad = item['Cantidad']
+				cantidad = float(item['Cantidad'])
 				descuento = float(item['Descuento'])
 				precio = item['Precio']
 
@@ -89,6 +90,20 @@ class FacturarView(View):
 				detalle.precio = precio
 				detalle.factura = Factura.objects.get(no_factura=next_factura)
 				detalle.save()
+
+				mov = Movimiento()
+				mov.producto = Producto.objects.get(codigo=codigo)
+				mov.cantidad = cantidad
+				mov.tipo_movimiento = 'S'
+				mov.save()
+
+				if Existencia.objects.get(producto=detalle.producto):
+					existencia = Existencia.objects.get(producto=detalle.producto)
+					existencia.cantidad -= cantidad
+					existencia.save()
+				else:
+					raise Exception('No hay existencia del producto --> ' + codigo)
+
 
 			return HttpResponse(next_factura)
 

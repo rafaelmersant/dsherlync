@@ -7,6 +7,7 @@ from datetime import datetime, timedelta
 class Apartado(models.Model):
 	estatus_choices = (('A','Activo'),('X','Anulado'))
 
+	no_apartado = models.IntegerField()
 	fecha = models.DateField(auto_now_add=True)
 	cliente = models.ForeignKey(Cliente)
 	producto = models.ForeignKey(Producto)

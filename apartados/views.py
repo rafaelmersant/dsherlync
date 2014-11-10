@@ -1,8 +1,17 @@
 from django.shortcuts import render, render_to_response
 
-from django.views.generic.edit import FormView
+from django.http import HttpResponse
+from django.views.generic.edit import FormView, View
+
 from .forms import ClienteForm
+
 from clientes.models import Cliente
+from apartados.models import Apartado, DeudaCliente
+from inventarios.models import Movimiento, Existencia
+from productos.models import Producto
+
+import json
+import math
 
 class ClienteFormView(FormView):
 	template_name = "apartados.html"
@@ -14,37 +23,58 @@ class ClienteFormView(FormView):
 
 		return super(ClienteFormView, self).form_valid(form)
 
+
+class ApartarView(View):
+
+	template_name = "apartados.html"
+
 	def post(self, request, *args, **kwargs):
 		try:
 
-			# data = json.loads(request.body)
-			# items = request.body
+			total_deuda = 0
 
-			# next_factura = Factura.objects.latest('pk').no_factura + 1
+			data = json.loads(request.body)
+
+			next_apartado = Apartado.objects.latest('pk').no_apartado + 1
 			
-			# factura = Factura()
-			# factura.no_factura = next_factura
-			# factura.save()
+			apartado = Apartado()
+			apartado.no_apartado = next_apartado
 			
-			# for item in data['items']:
-			# 	codigo = item['Codigo'].strip()
-			# 	cantidad = item['Cantidad']
-			# 	descuento = float(item['Descuento'])
-			# 	precio = item['Precio']
+			cliente = data['cliente']
 
-			# 	if descuento == '':
-			# 		descuento = '0'
+			for item in data['items']:
+				codigo = item['Codigo'].strip()
+				cantidad = float(item['Cantidad'])
+				descuento = float(item['Descuento'])
+				precio = float(item['Precio'])
+				total_deuda += (cantidad * precio) - descuento
 
-			# 	detalle = Detalle()
-			# 	detalle.producto = Producto.objects.get(codigo=codigo)
-			# 	detalle.cantidad = cantidad
-			# 	detalle.descuento = descuento
-			# 	detalle.precio = precio
-			# 	detalle.factura = Factura.objects.get(no_factura=next_factura)
-			# 	detalle.save()
+				if descuento == '':
+					descuento = '0'
 
-			return HttpResponse(request.body)
-			# return HttpResponse(next_factura)
+				apartado.cliente = Cliente.objects.get(pk=cliente)
+				apartado.producto = Producto.objects.get(codigo=codigo)
+				apartado.cantidad = cantidad
+				apartado.descuento = descuento
+				apartado.precio = precio
+				apartado.save()
+
+				mov = Movimiento()
+				mov.producto = Producto.objects.get(codigo=codigo)
+				mov.cantidad = cantidad
+				mov.tipo_movimiento = 'S'
+				mov.save()
+
+				existencia = Existencia.objects.get(producto=apartado.producto)
+				existencia.producto = Producto.objects.get(codigo=codigo)
+				existencia.cantidad -= cantidad
+				existencia.save()
+
+			deudaCte = DeudaCliente()
+			deudaCte.cliente = Cliente.objects.get(pk=cliente)
+			deudaCte.deuda = total_deuda
+
+			return HttpResponse(next_apartado)
 
 		except Exception as e:
 			return HttpResponse(e)

@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.core.urlresolvers import reverse_lazy
 
 from facturas.models import Factura, Detalle
+from productos.models import Producto
 from .models import Inventario, Movimiento, Existencia
 
 from .forms import InventarioForm
@@ -24,16 +25,19 @@ class InventarioFormView(FormView):
 		mov.save()
 
 		cantidad = 0
+
 		if inventario.tipo_inv == 'S':
 			cantidad = inventario.cantidad
 		else:
 			cantidad = inventario.cantidad * -1
 
-		if Existencia.objects.get(producto=inventario.producto):
+		existencia = Existencia()
+
+		try:
 			existencia = Existencia.objects.get(producto=inventario.producto)
 			existencia.cantidad += cantidad
-		else:
-			existencia = Existencia()
+
+		except existencia.DoesNotExist:
 			existencia.cantidad = cantidad
 			existencia.producto = inventario.producto
 		

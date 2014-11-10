@@ -519,8 +519,8 @@ function facturarImprimir(e){
 function ApartarProductos(e){
 
 	if(ValidarCamposApartados()){
-		//ClasificarFacturados();
-		//ClasificarApartados();
+		ClasificarFacturados();
+		ClasificarApartados();
 		
 		var csrftoken = getCookie('csrftoken');
 
@@ -532,11 +532,11 @@ function ApartarProductos(e){
 		    }
 		});
 		
-		//ENVIAR POST MEDIANTE AJAX PARA GUARDAR FACTURA EN BASE DE DATOS
+		//ENVIAR POST MEDIANTE AJAX PARA GUARDAR APARTADOS EN BASE DE DATOS
 		$.ajax({
 		    type: "POST",
-		    url: "http://127.0.0.1:8000/apartados/",
-		    data: JSON.stringify({'items': $dataFacturar.itemsfactura, 'cliente': prodLS['cliente']}),
+		    url: "http://127.0.0.1:8000/apartar/",
+		    data: JSON.stringify({'items': $dataFacturar.itemsfactura, 'cliente': prodLS['Cliente']}),
 		    contentType: 'application/json; charset=utf-8',
 
 		    success: function (data) {
@@ -558,7 +558,7 @@ function ApartarProductos(e){
 		    }
 		});
 
-		        console.log(JSON.stringify({'items': $dataFacturar.itemsfactura, 'cliente': prodLS['cliente']}));
+		        console.log(JSON.stringify({'items': $dataFacturar.itemsfactura, 'cliente': prodLS['Cliente']}));
 
 
 	}

@@ -9,7 +9,7 @@ from productos.views import ProductoListView, ProductoDisponibleView
 from clientes.views import ClienteListView
 from grupos.views import GrupoListView
 from facturas.views import FacturarView, FacturasDelDia, BuscarFactura, Reportes
-from apartados.views import ClienteFormView
+from apartados.views import ClienteFormView, ApartarView
 
 from inventarios.views import InventarioFormView
 
@@ -17,7 +17,6 @@ urlpatterns = patterns('',
     # Examples:
 
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-    # url(r'^$', FacturarView.as_view(), name='Facturas'),
     url(r'^$', 'facturas.views.index', name='Facturas'),
     url(r'^facturas/$', 'facturas.views.index', name='Facturas'),
 
@@ -30,7 +29,8 @@ urlpatterns = patterns('',
     url(r'^facturasdeldia/$', FacturasDelDia.as_view(), name='Facturas'),
     url(r'^facturasdeldia/(?P<Fecha>[\w\-]+)/$', FacturasDelDia.as_view(), name='Facturas'),
     url(r'^facturar/$', FacturarView.as_view(), name='Facturar'),
-    url(r'^apartados/$', ClienteFormView.as_view(), name='Apartados'),
+    url(r'^apartados/$', ClienteFormView.as_view(), name='Cliente'),
+    url(r'^apartar/$', ApartarView.as_view(), name='Apartados'),
 
     url(r'^grappelli', include('grappelli.urls')),
     url(r'^admin/', include(admin.site.urls)),
