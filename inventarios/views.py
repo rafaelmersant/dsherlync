@@ -27,9 +27,9 @@ class InventarioFormView(FormView):
 		cantidad = 0
 
 		if inventario.tipo_inv == 'S':
-			cantidad = inventario.cantidad
-		else:
 			cantidad = inventario.cantidad * -1
+		else:
+			cantidad = inventario.cantidad
 
 		existencia = Existencia()
 

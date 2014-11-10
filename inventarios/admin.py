@@ -11,9 +11,11 @@ class InventarioAdmin(admin.ModelAdmin):
 
 class MovimientoAdmin(admin.ModelAdmin):
 	list_display = ['id','producto','cantidad','tipo_movimiento','fecha_movimiento']
+	list_filter = ('producto',)
 
 class ExistenciaAdmin(admin.ModelAdmin):
 	list_display = ['id','producto','cantidad',]
+	list_filter = ('producto',)
 
 
 admin.site.register(Inventario,InventarioAdmin)

@@ -191,6 +191,43 @@ $('#iCte').on('input', function(e){
         }
 	});
 });
+
+
+// FUNCION PARA VERIFICAR EXISTENCIA DE UN PRODUCTO
+function getExistencia(codProducto, disponibilidad){
+	var disponible;
+
+	$('#iMessage').text('');
+
+	$.ajax({
+        type: "GET",
+        async: false,
+        url: 'http://127.0.0.1:8000/api/proddisp/' + codProducto +'/?format=json',
+        dataType: "json",
+        success: function(data) {
+			if (data){
+				disponible = data['cantidad'];
+
+				if (disponible < 10){
+					$('#iMessage').text('ADVERTENCIA: El producto ' + codProducto + ' solo tiene ' + disponible + ' en existencia. Recuerde alimentar el inventario.');
+				}
+				if (disponible <= 0){
+					$('#iMessage').text('LO SIENTO: El producto ' + codProducto + ' NO TIENE EXISTENCIA. Favor dar entrada por inventario.');
+				}
+			}
+			else{
+				
+				$('#iMessage').text('NO PUDO SER VERIFICA LA EXISTENCIA DEL PRODUCTO ');
+			}
+		},
+		error: function(response){
+			$('#iMessage').text('LO SIENTO: El producto ' + codProducto + ' NO TIENE EXISTENCIA. Favor dar entrada por inventario.');
+		}
+	});
+
+	return disponible;
+}
+
 //*****************************************************************************************************
 //*****************************************************************************************************
 //FIN DE EVENTOS
@@ -210,34 +247,41 @@ $('#iCte').on('input', function(e){
 // FUNCION PARA AGREGAR UN PRODUCTO A LA TABLA
 function agregarProducto(codigo, descrp, departamento, varprecio){
 
-	$cambio = 1;
-	$('#Items').removeClass('HideItem');
+	var disponibilidad;
 
-	$content = $('#Items');
-	RegCOUNT = RegCOUNT + 1;
+	disponibilidad = getExistencia(codigo);
 
-	$content.append('<tr class="DetailsItem" id="idItemF' + RegCOUNT + '">' +
-						'<td class="CellItemDetail ' + departamento + ' dCod" id="iSec'+ RegCOUNT +' ">' + RegCOUNT +' </td>' +
-						'<td class="CellItemDetail ' + departamento + ' dCod" id="iCodigo'+ RegCOUNT +'">' + codigo + ' </td>' +
-						'<td class="CellItemDetail ' + departamento + ' dDescrp" id="iDescripcion'+ RegCOUNT +'">' + descrp + ' </td>' +
-						'<td class="CellItemDetail ' + departamento + ' dCant"> <input id="iCantidad'+ RegCOUNT +'" onkeypress="return EventosTextBox(1,'+ RegCOUNT +');" type="text" value="1" class="TextBoxes TextItems" PlaceHolder="0.00"/> </td>' +
-						'<td class="CellItemDetail ' + departamento + ' dPrecio"> <input id="iPrecio'+ RegCOUNT +'" onkeypress="return EventosTextBox(2,'+ RegCOUNT+');" type="text" value="0.00" class="TextBoxes TextItems" PlaceHolder="0.00"/></td>' +
-						'<td class="CellItemDetail ' + departamento + ' dDesc"> <input id="iDescuento'+ RegCOUNT +'" onkeypress="return EventosTextBox(3,'+ RegCOUNT+');" type="text" value="0.00" class="TextBoxes TextItems" PlaceHolder="0.00"/> </td>' +
-						'<td class="CellItemDetail ' + departamento + ' dImporte"> <span id="idImporte'+ RegCOUNT +'"> 0.00 </span> </td>' +
-						'<td class="CellDelete CellItemDetail" id="idDelete'+ RegCOUNT +'"><a href="javascript:EliminarReg(' + RegCOUNT + ')" class="DelItem icon-delete"> </a> </td>' +
-						'<td class="CellDelete CellItemDetail '+ prodLS['display'] +'" id="idApartar'+ RegCOUNT +'"><a href="javascript:ApartarReg('+ RegCOUNT +')" class="ApartarItem icon-spinner"> </a> </td>' +
-					'</tr>').hide().fadeIn('fast');
+	if (disponibilidad > 0){
+		$cambio = 1;
+		$('#Items').removeClass('HideItem');
+
+		$content = $('#Items');
+		RegCOUNT = RegCOUNT + 1;
+
+		$content.append('<tr class="DetailsItem" id="idItemF' + RegCOUNT + '">' +
+							'<td class="CellItemDetail ' + departamento + ' dCod" id="iSec'+ RegCOUNT +' ">' + RegCOUNT +' </td>' +
+							'<td class="CellItemDetail ' + departamento + ' dCod" id="iCodigo'+ RegCOUNT +'">' + codigo + ' </td>' +
+							'<td class="CellItemDetail ' + departamento + ' dDescrp" id="iDescripcion'+ RegCOUNT +'">' + descrp + ' </td>' +
+							'<td class="CellItemDetail ' + departamento + ' dCant"> <input id="iCantidad'+ RegCOUNT +'" onkeypress="return EventosTextBox(1,'+ RegCOUNT +');" type="text" value="1" class="TextBoxes TextItems" PlaceHolder="0.00"/> </td>' +
+							'<td class="CellItemDetail ' + departamento + ' dPrecio"> <input id="iPrecio'+ RegCOUNT +'" onkeypress="return EventosTextBox(2,'+ RegCOUNT+');" type="text" value="0.00" class="TextBoxes TextItems" PlaceHolder="0.00"/></td>' +
+							'<td class="CellItemDetail ' + departamento + ' dDesc"> <input id="iDescuento'+ RegCOUNT +'" onkeypress="return EventosTextBox(3,'+ RegCOUNT+');" type="text" value="0.00" class="TextBoxes TextItems" PlaceHolder="0.00"/> </td>' +
+							'<td class="CellItemDetail ' + departamento + ' dImporte"> <span id="idImporte'+ RegCOUNT +'"> 0.00 </span> </td>' +
+							'<td class="CellDelete CellItemDetail" id="idDelete'+ RegCOUNT +'"><a href="javascript:EliminarReg(' + RegCOUNT + ')" class="DelItem icon-delete"> </a> </td>' +
+							'<td class="CellDelete CellItemDetail '+ prodLS['display'] +'" id="idApartar'+ RegCOUNT +'"><a href="javascript:ApartarReg('+ RegCOUNT +')" class="ApartarItem icon-spinner"> </a> </td>' +
+						'</tr>').hide().fadeIn('fast');
 
 
-	//SELECCIONAR EL TEXTO COMPLETO DE LOS SIGUIENTES CAMPOS
-	$('#iCantidad' + RegCOUNT).click(function(){$(this).select();});
-	$('#iPrecio' + RegCOUNT).click(function(){$(this).select();});
-	$('#iDescuento' + RegCOUNT).click(function(){$(this).select();});
-	//*****FIN SELECCION COMPLETA DE TEXTO EN CAMPOS**********
-	
-	CalculaLinea(RegCOUNT);
+		//SELECCIONAR EL TEXTO COMPLETO DE LOS SIGUIENTES CAMPOS
+		$('#iCantidad' + RegCOUNT).click(function(){$(this).select();});
+		$('#iPrecio' + RegCOUNT).click(function(){$(this).select();});
+		$('#iDescuento' + RegCOUNT).click(function(){$(this).select();});
+		//*****FIN SELECCION COMPLETA DE TEXTO EN CAMPOS**********
+		
+		CalculaLinea(RegCOUNT);
 
-	$('#iCantidad' + RegCOUNT).focus().select();
+		$('#iCantidad' + RegCOUNT).focus().select();
+
+	}
 }
 //**************************************************************
 
@@ -536,31 +580,26 @@ function ApartarProductos(e){
 		$.ajax({
 		    type: "POST",
 		    url: "http://127.0.0.1:8000/apartar/",
-		    data: JSON.stringify({'items': $dataFacturar.itemsfactura, 'cliente': prodLS['Cliente']}),
+		    data: JSON.stringify({'items': $dataFacturar.itemsfactura, 'cliente': prodLS['Cliente'], 'abono': $('#iPagoF').val()}),
 		    contentType: 'application/json; charset=utf-8',
 
 		    success: function (data) {
-		    	// if (data >= 1){
+		    	 if (data >= 1){
 
-		    	// 	data = 'La factura '+ data +' se guardó con exito!';
+		    		data = 'Los registros fueron guardados con exito!';
 		    		
-		    	// 	$('#btnImprimir').removeClass('AddItem');
-		    	// 	// $('#btnImprimir').removeClass('PrintFact');
-		    	// 	$('#btnImprimir').addClass('InhabilitaBoton');
+		    		$('#btnApartar').removeClass('AddItem');
+		    		$('#btnApartar').addClass('InhabilitaBoton');
 
-		    	// 	$('#btnImprimir').attr('href','#');
-		     	//  $('#iMessage').addClass('Guardado');
-		     	//	$('#iMessage').text(data);
-		    	//}
+		    		$('#btnApartar').attr('href','#');
+		     	 	$('#iMessage').addClass('Guardado');
+		     		$('#iMessage').text(data);
+		    	}
 
 		        $('#iMessage').text(data);
 
 		    }
 		});
-
-		        console.log(JSON.stringify({'items': $dataFacturar.itemsfactura, 'cliente': prodLS['Cliente']}));
-
-
 	}
 	else
 	{

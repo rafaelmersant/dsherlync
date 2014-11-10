@@ -1,12 +1,14 @@
 from django.shortcuts import render, render_to_response
+from django.contrib.auth.decorators import login_required
 
 from django.http import HttpResponse
-from django.views.generic.edit import FormView, View
+from django.views.generic.edit import FormView
+from django.views.generic import ListView, View
 
 from .forms import ClienteForm
 
 from clientes.models import Cliente
-from apartados.models import Apartado, DeudaCliente
+from apartados.models import Apartado, DeudaCliente, AbonoCliente
 from inventarios.models import Movimiento, Existencia
 from productos.models import Producto
 
@@ -35,12 +37,16 @@ class ApartarView(View):
 
 			data = json.loads(request.body)
 
-			next_apartado = Apartado.objects.latest('pk').no_apartado + 1
+			if Apartado.objects.count() > 0:
+				next_apartado = Apartado.objects.latest('pk').no_apartado + 1
+			else:
+				next_apartado = 1
 			
 			apartado = Apartado()
 			apartado.no_apartado = next_apartado
 			
 			cliente = data['cliente']
+			abono = data['abono']
 
 			for item in data['items']:
 				codigo = item['Codigo'].strip()
@@ -65,17 +71,48 @@ class ApartarView(View):
 				mov.tipo_movimiento = 'S'
 				mov.save()
 
-				existencia = Existencia.objects.get(producto=apartado.producto)
-				existencia.producto = Producto.objects.get(codigo=codigo)
-				existencia.cantidad -= cantidad
-				existencia.save()
+				existencia = Existencia()
+				try:
+					existencia = Existencia.objects.get(producto=apartado.producto)
+					existencia.cantidad -= cantidad
+					existencia.save()
+
+				except existencia.DoesNotExist:
+					raise Exception('No tiene el producto ' + apartado.producto.descripcion + ' en Existencia.')		
+
+			if abono:
+				abonoCte = AbonoCliente()
+				abonoCte.cliente = apartado.cliente
+				abonoCte.abono = float(abono)
+				abonoCte.save()
+				total_deuda = total_deuda - float(abono)
 
 			deudaCte = DeudaCliente()
 			deudaCte.cliente = Cliente.objects.get(pk=cliente)
 			deudaCte.deuda = total_deuda
+			deudaCte.save()
 
 			return HttpResponse(next_apartado)
 
 		except Exception as e:
 			return HttpResponse(e)
 
+
+class AbonarCuentaView(ListView):
+
+	template_name = 'abonarcuenta.html'
+	model = AbonoCliente
+
+	def get(self, request, *args, **kwargs):
+		if self.request.GET.get('cliente'):
+			parametro = self.request.GET.get('cliente')
+
+			cliente = Cliente.objects.get(nombre=parametro)
+			queryset = DeudaCliente.objects.filter(cliente=cliente)
+		else:
+			queryset = None
+
+		self.object_list = queryset
+		context = self.get_context_data()
+
+		return self.render_to_response(context)

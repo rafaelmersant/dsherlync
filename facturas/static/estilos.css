@@ -5,6 +5,15 @@ body{
 	padding: 0;
 }
 
+h2{
+	/*margin-left: 0.8em;*/
+	color: #555;
+	font-size: 1.2em;
+	position: absolute;
+	left: 9em;
+	float: left;
+	top: 3.8em;
+}
 /* FORMULARIO DE INVENTARIO */
 .InventarioSection label{
 	color: black;
@@ -108,9 +117,17 @@ body{
 .search-iconProd{
 	font-size: 1.2em;
 	position: absolute;
-	right: 7.2em;
+	right: 10.35em;
 	top: .35em;
 	color: #ccc;
+}
+.search-iconCte{
+	font-size: 1.2em;
+	position: absolute;
+	right: 7.25em;
+	top: .35em;
+	color: #ccc;
+	cursor: pointer;
 }
 .search-icon2{
 	font-size: 1.2em;
@@ -485,7 +502,9 @@ body{
 	font-weight: bold;
 	border: 2px solid black;
 }
-
+.margenesProducto{
+	text-align: left;
+}
 .margenesRow{
 	padding: 0.4em 0.2em;
 	text-align: right;

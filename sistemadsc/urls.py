@@ -9,7 +9,7 @@ from productos.views import ProductoListView, ProductoDisponibleView
 from clientes.views import ClienteListView
 from grupos.views import GrupoListView
 from facturas.views import FacturarView, FacturasDelDia, BuscarFactura, Reportes
-from apartados.views import ClienteFormView, ApartarView
+from apartados.views import ClienteFormView, ApartarView, AbonarCuentaView
 
 from inventarios.views import InventarioFormView
 
@@ -23,6 +23,7 @@ urlpatterns = patterns('',
     #REPORTES
     url(r'^reportes/$', Reportes.as_view(), name='Reportes'),
     url(r'^buscarfactura/$', BuscarFactura.as_view(), name='Buscar Facturas'),
+    url(r'^abonar/$', AbonarCuentaView.as_view(), name='Abonar'),
 
     url(r'^inventario/$', InventarioFormView.as_view(), name='Inventario'),    
 

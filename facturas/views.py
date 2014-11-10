@@ -24,7 +24,21 @@ class Reportes(TemplateView):
 class BuscarFactura(ListView):
 	
 	template_name = 'buscarfactura.html'
-	model = Factura
+	model = Detalle
+
+
+	def get(self, request, *args, **kwargs):
+		if self.request.GET.get('Factura'):
+			parametro = self.request.GET.get('Factura')
+
+			queryset = Detalle.objects.filter(factura=parametro)
+		else:
+			queryset = None
+
+		self.object_list = queryset
+		context = self.get_context_data()
+
+		return self.render_to_response(context)
 
 
 class FacturasDelDia(ListView):
@@ -97,13 +111,14 @@ class FacturarView(View):
 				mov.tipo_movimiento = 'S'
 				mov.save()
 
-				if Existencia.objects.get(producto=detalle.producto):
+				existencia = Existencia()
+				try:
 					existencia = Existencia.objects.get(producto=detalle.producto)
 					existencia.cantidad -= cantidad
 					existencia.save()
-				else:
-					raise Exception('No hay existencia del producto --> ' + codigo)
 
+				except existencia.DoesNotExist:
+					raise Exception('No tiene el producto ' + detalle.producto.descripcion + ' en Existencia.')
 
 			return HttpResponse(next_factura)
 

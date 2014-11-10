@@ -1,0 +1,39 @@
+{% extends 'masterpage.html' %}
+
+{% block title %} Buscar Cliente para Abonar Cuenta {% endblock title %}
+
+{% block content %}
+
+{% load mathfilters %}
+{% load humanize %}
+
+<section>
+	<h2> Buscar Cliente para Abonar Cuenta </h2>
+	<br>
+
+	<form action="" method="get" >
+
+		<div class="factura"> 
+			Buscar Cliente: <input type="text" name="cliente" class="ProductDescrp TextBoxes clsCte" AutoComplete="off" PlaceHolder="Buscar Cliente" id="iCte" /> 	
+			<input type="hidden" id="idCliente" value="javascript:$prodLS['Cliente'];">
+			<input type="submit" class="AddItem PrintFact" value="Buscar"> 
+		</div> 
+	</form>
+	
+	<table id="clientesajax" class="tableSearchCte"> </table>
+	
+	<div class="linea"></div>
+	<div class="margenLeft">
+		{% for abono in object_list %}
+
+			{{ abono.cliente }}
+		{% empty %}
+			<p>No Hay Nada</p>
+		{% endfor %}
+			
+	</div>
+
+	
+</section>
+
+{% endblock content %}
