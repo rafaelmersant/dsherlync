@@ -5,4 +5,4 @@ class Cliente(models.Model):
 	telefono = models.CharField(max_length=50)
 	
 	def __unicode__(self):
-		return "%s - (%s)" % (self.nombre, self.telefono)
+		return '%s' % (self.nombre)

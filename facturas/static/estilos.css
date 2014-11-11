@@ -6,13 +6,30 @@ body{
 }
 
 h2{
-	/*margin-left: 0.8em;*/
 	color: #555;
 	font-size: 1.2em;
 	position: absolute;
 	left: 9em;
 	float: left;
 	top: 3.8em;
+}
+.MontoDeuda{
+	font-size: 1.3em;
+	color: red;
+	line-height: 22px;
+	font-weight: bold;
+}
+.BCte{
+	position: absolute;
+	top: -4.5em;
+	left: 31.8em;
+	margin: 0;
+	padding: 0;
+}
+.NoMargenNoPadding{
+	margin: 0;
+	padding: 0;
+	height: .2em;
 }
 /* FORMULARIO DE INVENTARIO */
 .InventarioSection label{
@@ -181,6 +198,11 @@ h2{
 	background: white;
 }
 
+#abonosajax{
+	margin: 1.6em 0 0 2em;
+	width: 30%;
+}
+
 #productosajax{
 	margin: 0.3em 0 0 6em;
 	position: absolute;
@@ -209,6 +231,13 @@ h2{
 .DetailsItemSearch{
 	border-radius: 1.4em 0 1.4em 0;
 	/*border: 1px solid red;*/
+}
+.CellItemDetailAbono{
+	font-size: 1.1em;
+	color: red;
+	text-align: right;
+	border: 2px solid #555;
+	padding: 0.13em 0.13em;
 }
 .CellItemDetailSearch{
 	padding: 0.1em 0 0 0.1em;

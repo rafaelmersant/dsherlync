@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 
 from django.http import HttpResponse
 from django.views.generic.edit import FormView
-from django.views.generic import ListView, View
+from django.views.generic import ListView, View, TemplateView
 
 from .forms import ClienteForm
 
@@ -11,6 +11,11 @@ from clientes.models import Cliente
 from apartados.models import Apartado, DeudaCliente, AbonoCliente
 from inventarios.models import Movimiento, Existencia
 from productos.models import Producto
+
+from .serializers import AbonoSerializer
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
 
 import json
 import math
@@ -104,15 +109,81 @@ class AbonarCuentaView(ListView):
 	model = AbonoCliente
 
 	def get(self, request, *args, **kwargs):
-		if self.request.GET.get('cliente'):
-			parametro = self.request.GET.get('cliente')
+		try:
 
-			cliente = Cliente.objects.get(nombre=parametro)
-			queryset = DeudaCliente.objects.filter(cliente=cliente)
+			if self.request.GET.get('cliente'):
+				parametro = self.request.GET.get('cliente')
+
+				deuda = DeudaCliente()
+				try:
+
+					cliente = Cliente.objects.get(pk=parametro)
+					deuda = DeudaCliente.objects.get(cliente=cliente).deuda
+				except DeudaCliente.DoesNotExist:
+					queryset = None
+
+				if deuda <= 0:
+					queryset = None
+				else:
+					queryset = DeudaCliente.objects.filter(cliente=cliente)
+			else:
+				queryset = None
+
+			self.object_list = queryset
+			context = self.get_context_data()
+
+			return self.render_to_response(context)
+
+		except Exception as e:
+			return HttpResponse(e)
+
+class AbonoListView(APIView):
+
+	serialized_abono = AbonoSerializer
+
+	def get(self, request, cliente=None, format=None):
+		if cliente != None:
+			o_cliente = Cliente.objects.filter(id=cliente)
+			abonos = AbonoCliente.objects.filter(cliente=o_cliente)
 		else:
-			queryset = None
+			abonos = None
 
-		self.object_list = queryset
-		context = self.get_context_data()
+		response = self.serialized_abono(abonos,many=True)
+		return Response(response.data)
 
-		return self.render_to_response(context)
+
+class AbonarMontoView(View):
+
+	template_name = "abonarcuenta.html"
+
+	def post(self, request, *args, **kwargs):
+		try:
+
+			data = json.loads(request.body)
+			
+			cliente = data['cliente']
+			montoAbono = data['abono']
+
+			o_cliente = Cliente.objects.get(pk=cliente)
+
+			abono = AbonoCliente()
+			abono.cliente = o_cliente
+			abono.abono = montoAbono
+			abono.save()
+
+			deudaCte = DeudaCliente.objects.get(cliente=abono.cliente)
+			if montoAbono > deudaCte.deuda:
+				raise Exception('El monto que intenta pagar esta por encima de la deuda.')
+			else:
+				deudaCte.deuda -= montoAbono
+				deudaCte.save()
+
+			if (deudaCte.deuda - montoAbono) == 0:
+				apartados = Apartado.objects.filter(cliente=abono.cliente)
+				apartados.estatus = 'C'
+				apartados.save()
+
+			return HttpResponse('El abono fue realizado!')
+
+		except Exception as e:
+			return HttpResponse(e)

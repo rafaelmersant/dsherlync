@@ -5,7 +5,7 @@ from clientes.models import Cliente
 from datetime import datetime, timedelta
 
 class Apartado(models.Model):
-	estatus_choices = (('A','Activo'),('X','Anulado'))
+	estatus_choices = (('A','Activo'),('X','Anulado'),('C','Completado'))
 
 	no_apartado = models.IntegerField()
 	fecha = models.DateField(auto_now_add=True)
@@ -22,6 +22,9 @@ class DeudaCliente(models.Model):
 
 	cliente = models.ForeignKey(Cliente)
 	deuda = models.DecimalField(max_digits=8, decimal_places=2)
+
+	def __unicode__(self):
+		return '%s' % (self.cliente)
 
 
 class AbonoCliente(models.Model):

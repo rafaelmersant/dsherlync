@@ -9,7 +9,7 @@ from productos.views import ProductoListView, ProductoDisponibleView
 from clientes.views import ClienteListView
 from grupos.views import GrupoListView
 from facturas.views import FacturarView, FacturasDelDia, BuscarFactura, Reportes
-from apartados.views import ClienteFormView, ApartarView, AbonarCuentaView
+from apartados.views import ClienteFormView, ApartarView, AbonarCuentaView, AbonoListView, AbonarMontoView
 
 from inventarios.views import InventarioFormView
 
@@ -24,6 +24,7 @@ urlpatterns = patterns('',
     url(r'^reportes/$', Reportes.as_view(), name='Reportes'),
     url(r'^buscarfactura/$', BuscarFactura.as_view(), name='Buscar Facturas'),
     url(r'^abonar/$', AbonarCuentaView.as_view(), name='Abonar'),
+    url(r'^abonarMonto/$', AbonarMontoView.as_view(), name='AbonarMonto'),
 
     url(r'^inventario/$', InventarioFormView.as_view(), name='Inventario'),    
 
@@ -38,6 +39,7 @@ urlpatterns = patterns('',
 
     #API
     url(r'^api/proddisp/(?P<Prod>[\w]+)/$', ProductoDisponibleView.as_view()),
+    url(r'^api/abonos/(?P<cliente>[\w]+)/$', AbonoListView.as_view()),
    
     url(r'^api/productos/$', ProductoListView.as_view()),
     url(r'^api/productos/(?P<descrp>[\w\s]+)/$', ProductoListView.as_view()),

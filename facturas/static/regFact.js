@@ -11,7 +11,7 @@ var itemsApartar = [];
 // VARIABLE PARA EL CONTENIDO DE LA TABLA DE PRODUCTOS
 var contenido = $('#productosajax');
 var contenido2 = $('#clientesajax');
-
+var contenidoAbono = $('#abonosajax');
 //*****************************************************************************************************
 //*****************************************************************************************************
 //INICIO DE EVENTOS
@@ -228,6 +228,48 @@ function getExistencia(codProducto, disponibilidad){
 	return disponible;
 }
 
+
+// FUNCION PARA TRAER EL HISTORIAL DE ABONOS
+function HistorialAbonos(){
+
+	$('#iMessage').text('');
+
+	$.ajax({
+        type: "GET",
+        url: 'http://127.0.0.1:8000/api/abonos/' + sessionStorage.getItem('cliente') +'/?format=json',
+        dataType: "json",
+        success: function(data) {
+			contenidoAbono.html('');
+
+			if (data.length > 0){
+				contenidoAbono.append(
+					'<tr class="HeaderItem">' +
+					'<td class="CellItemHeader"> Monto Abonado </td>' +
+					'<td class="CellItemHeader"> Fecha del Abono </td> ' +
+					'</tr>'
+					);
+				$.each(data, function(index, element) {
+					contenidoAbono.append(
+						'<tr>' +
+						'<td id="iabono" class="CellItemDetailAbono">' + element['abono'] +'</td>' +					
+						'<td id="ifecha" class="CellItemDetailAbono">' + element['fecha'] +'</td>' +
+						'</tr>'
+						);
+				});
+			}
+			else{
+				contenidoAbono.html('<p class="margenNoExiste"> NO TIENE HISTORIAL DE ABONOS. </p>');
+			}
+
+			contenidoAbono.hide();
+			contenidoAbono.fadeIn('low');
+		},
+        error: function(response) {
+			contenidoAbono.html('<p class="margenNoExiste"> NO TIENE HISTORIAL DE ABONOS. </p>');
+        }
+	});	
+}
+
 //*****************************************************************************************************
 //*****************************************************************************************************
 //FIN DE EVENTOS
@@ -290,6 +332,8 @@ function agregarCliente(codigo, nombre){
 
 	$('#iCte').val(nombre);
 	prodLS['Cliente'] = codigo;
+	$('#idCliente').attr('value',codigo);
+	sessionStorage.setItem('cliente', codigo);
 }
 //**************************************************************
 
@@ -597,6 +641,46 @@ function ApartarProductos(e){
 		    	}
 
 		        $('#iMessage').text(data);
+
+		    }
+		});
+	}
+	else
+	{
+		$('#iMessage').text('Favor verificar que los campos han sido completados.').removeClass('Guardado');
+
+	}
+}
+//**************************************************************
+
+//FUNCION PARA INSERTAR ABONO
+function AbonarMonto(){
+
+	if($('#iMonto').val() != ''){
+		
+		var csrftoken = getCookie('csrftoken');
+
+		$.ajaxSetup({
+		    beforeSend: function(xhr, settings) {
+		        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+		            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+		        }
+		    }
+		});
+		
+		//ENVIAR POST MEDIANTE AJAX PARA INSERTAR ABONO A CUENTA
+		$.ajax({
+		    type: "POST",
+		    url: "http://127.0.0.1:8000/abonarMonto/",
+		    data: JSON.stringify({'cliente': sessionStorage.getItem('cliente'), 'abono': $('#iMonto').val()}),
+		    contentType: 'application/json; charset=utf-8',
+
+		    success: function (data) {
+		        $('#iMessage').text(data);
+		    },
+
+		    error: function(response){
+		        $('#iMessage').text(response);
 
 		    }
 		});

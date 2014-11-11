@@ -9,31 +9,60 @@
 
 <section>
 	<h2> Buscar Cliente para Abonar Cuenta </h2>
-	<br>
+	
 
-	<form action="" method="get" >
+	<div class="margenTop"></div>
 
-		<div class="factura"> 
-			Buscar Cliente: <input type="text" name="cliente" class="ProductDescrp TextBoxes clsCte" AutoComplete="off" PlaceHolder="Buscar Cliente" id="iCte" /> 	
-			<input type="hidden" id="idCliente" value="javascript:$prodLS['Cliente'];">
-			<input type="submit" class="AddItem PrintFact" value="Buscar"> 
+	<div class="factura">
+		Cliente: <input type="text" name="cliente" class="ProductDescrp TextBoxes clsCte" AutoComplete="off" PlaceHolder="Buscar Cliente" id="iCte" /> 	
+	</div>
+	<table id="clientesajax" class="tableSearchCte"> </table>
+
+	<form action="" method="get" class="NoMargenNoPadding">
+			<input type="submit" class="AddItem PrintFact BCte" value="Buscar"> 
+
+		<div> 
+			<input type="hidden" name="cliente" id="idCliente">
 		</div> 
 	</form>
 	
-	<table id="clientesajax" class="tableSearchCte"> </table>
 	
 	<div class="linea"></div>
-	<div class="margenLeft">
-		{% for abono in object_list %}
-
-			{{ abono.cliente }}
-		{% empty %}
-			<p>No Hay Nada</p>
-		{% endfor %}
-			
-	</div>
-
 	
+	{% if object_list %}
+
+		<div class="margenLeft">
+			{% for deuda in object_list %}
+
+				<p> Cliente: {{ deuda.cliente }} </p> 
+				<p> Deuda: <scan class="MontoDeuda">{{ deuda.deuda }} </scan> </p> 
+
+				<form action="" method="POST">
+					<p>Monto: <input type="text" id="iMonto" class="abonar" required oninvalid="this.setCustomValidity('Favor digitar un monto')" oninput="setCustomValidity('')"/> 
+					<a href="javascript:AbonarMonto();" class="AddItem PrintFact"> Abonar </a>
+						 </p>
+				</form>
+		</div>
+
+			{% empty %}
+				<p class="margenLeft">Este cliente NO tiene ninguna deuda</p>
+			{% endfor %}
+	{% else %}
+		<p class="margenLeft">Este cliente NO tiene ninguna deuda</p>
+
+	{% endif %}
+	
+	<div class="margenLeft margenTop">
+		{% if object_list %}
+			<a href="javascript:HistorialAbonos();" class="AddItem PrintFact"> Ver Historial </a>
+		{% endif %}
+		
+		<table id="abonosajax" class="margenTop"> </table>
+
+	</div>
+	
+	<p id="pMessaje"> <div> <span id="iMessage" class="clsMessage margenLeft">  </span> </div> </p>
+
 </section>
 
 {% endblock content %}
