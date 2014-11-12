@@ -14,4 +14,7 @@ class Producto(models.Model):
 	departamento = models.ForeignKey(Departamento)
 
 	def __unicode__(self):
-		return "%s" % self.descripcion
+		return "%s" % (self.descripcion)
+
+	class Meta:
+		ordering = ['descripcion']

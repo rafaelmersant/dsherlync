@@ -149,7 +149,7 @@ $('#iProd').on('input', function(e){
 			contenido.fadeIn('fast');
 		},
         error: function(response) {
-			contenido.html('<p class="margenNoExiste"> NO EXISTE EL CLIENTE ESPECIFICADO. </p>');
+			contenido.html('<p class="margenNoExiste"> NO EXISTE EL PRODUCTO ESPECIFICADO. </p>');
         }
 	});
 });
@@ -194,7 +194,7 @@ $('#iCte').on('input', function(e){
 
 
 // FUNCION PARA VERIFICAR EXISTENCIA DE UN PRODUCTO
-function getExistencia(codProducto, disponibilidad){
+function getExistencia(codProducto, descrip){
 	var disponible;
 
 	$('#iMessage').text('');
@@ -209,10 +209,10 @@ function getExistencia(codProducto, disponibilidad){
 				disponible = data['cantidad'];
 
 				if (disponible < 10){
-					$('#iMessage').text('ADVERTENCIA: El producto ' + codProducto + ' solo tiene ' + disponible + ' en existencia. Recuerde alimentar el inventario.');
+					$('#iMessage').html('ADVERTENCIA: El producto ' + '<span class="lProducto"> ' + descrip + '</span>' + ' solo tiene ' + '<span class="lProducto">' + disponible + '</span>' + ' en existencia. Recuerde alimentar el inventario.');
 				}
 				if (disponible <= 0){
-					$('#iMessage').text('LO SIENTO: El producto ' + codProducto + ' NO TIENE EXISTENCIA. Favor dar entrada por inventario.');
+					$('#iMessage').html('LO SIENTO: El producto ' + ' <span class="lProducto"> ' + descrip + '</span>' + ' NO TIENE EXISTENCIA. Favor dar entrada por inventario.');
 				}
 			}
 			else{
@@ -221,7 +221,7 @@ function getExistencia(codProducto, disponibilidad){
 			}
 		},
 		error: function(response){
-			$('#iMessage').text('LO SIENTO: El producto ' + codProducto + ' NO TIENE EXISTENCIA. Favor dar entrada por inventario.');
+			$('#iMessage').text('LO SIENTO: El producto ' + descrip + ' NO TIENE EXISTENCIA. Favor dar entrada por inventario.');
 		}
 	});
 
@@ -270,6 +270,7 @@ function HistorialAbonos(){
 	});	
 }
 
+
 //*****************************************************************************************************
 //*****************************************************************************************************
 //FIN DE EVENTOS
@@ -291,7 +292,7 @@ function agregarProducto(codigo, descrp, departamento, varprecio){
 
 	var disponibilidad;
 
-	disponibilidad = getExistencia(codigo);
+	disponibilidad = getExistencia(codigo, descrp);
 
 	if (disponibilidad > 0){
 		$cambio = 1;
@@ -429,8 +430,8 @@ function ValidarCampos(){
 		valor = false;
 	}
 
-	for(j=0; j<=RegCOUNT; j++){
-		if(parseFloat($('#iImporte' + j).text()) <= 0){
+	for(j=1; j<=RegCOUNT; j++){
+		if(parseFloat($('#idImporte' + j).text()) <= 0){
 			valor = false;
 		}
 	}
@@ -443,8 +444,8 @@ function ValidarCampos(){
 function ValidarCamposApartados(){
 	valor = true
 
-	for(j=0; j<=RegCOUNT; j++){
-		if(parseFloat($('#iImporte' + j).text()) <= 0){
+	for(j=1; j<=RegCOUNT; j++){
+		if(parseFloat($('#idImporte' + j).text()) <= 0 || $('#idImporte' + j).text() == ''){
 			valor = false;
 		}
 	}
@@ -639,8 +640,9 @@ function ApartarProductos(e){
 		     	 	$('#iMessage').addClass('Guardado');
 		     		$('#iMessage').text(data);
 		    	}
-
-		        $('#iMessage').text(data);
+		    	else{
+			        $('#iMessage').text(data);
+		    	}
 
 		    }
 		});
@@ -671,11 +673,14 @@ function AbonarMonto(){
 		//ENVIAR POST MEDIANTE AJAX PARA INSERTAR ABONO A CUENTA
 		$.ajax({
 		    type: "POST",
+		    async: false,
 		    url: "http://127.0.0.1:8000/abonarMonto/",
 		    data: JSON.stringify({'cliente': sessionStorage.getItem('cliente'), 'abono': $('#iMonto').val()}),
 		    contentType: 'application/json; charset=utf-8',
 
 		    success: function (data) {
+		    	$('#idSubmitAbono').submit();
+		    	HistorialAbonos();
 		        $('#iMessage').text(data);
 		    },
 

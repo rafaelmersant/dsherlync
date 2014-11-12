@@ -13,6 +13,10 @@ h2{
 	float: left;
 	top: 3.8em;
 }
+.lProducto{
+	font-size: 1.2em;
+	color: blue;
+}
 .MontoDeuda{
 	font-size: 1.3em;
 	color: red;
@@ -218,9 +222,9 @@ h2{
 .tableSearchCte{
 	border: 2px solid #333333;
 	position: absolute;
-	left: 4.5em;
+	left: 5em;
 	background: white;
-	margin-top: .2em;
+	margin-top: -.01em;
 	width: 390px;
 }
 
@@ -531,7 +535,15 @@ h2{
 	font-weight: bold;
 	border: 2px solid black;
 }
+.margenesTitleProd{
+	padding: 0.3em 0 0.3em .3em;
+	text-align: left;
+	font-weight: bold;
+	border: 2px solid black;
+}
 .margenesProducto{
+	border: 2px solid gray;
+	padding: 0.4em 0.2em;
 	text-align: left;
 }
 .margenesRow{
@@ -539,4 +551,20 @@ h2{
 	text-align: right;
 	border: 2px solid gray;
 
+}
+.margenesRow2{
+	border: 2px solid gray;
+	text-align: center;
+}
+.margenesRowVer{
+	margin: 0 auto;
+	text-decoration: none;
+	color: black;
+	font-size: 1.5em;
+	-webkit-transition: .5s;
+
+}
+.margenesRowVer:hover{
+	-webkit-transform: scale(1.2);
+	color: blue;
 }

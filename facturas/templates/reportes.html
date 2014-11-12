@@ -14,14 +14,12 @@
 	<a href="/facturasdeldia" class="AddItem"> Facturas por Dia</a>
 </div>
 
-{% if user == 'dsc' %}
-<div class="facturasdeldia margenLeft margenTop reporteItem">
-	<a href="/facturasdeldia" class="AddItem"> Articulos Vendidos</a>
-</div>
-<div class="facturasdeldia margenLeft margenTop reporteItem">
-	<a href="/facturasdeldia" class="AddItem"> Deudas de Clientes</a>
-</div>
-</section>
+{% if user.is_superuser %}
+	<div class="facturasdeldia margenLeft margenTop reporteItem">
+		<a href="#" class=" InhabilitaBoton"> Articulos Vendidos</a>
+	</div>
+	
+	</section>
 {% endif %}
 
 {% endblock content %}

@@ -22,7 +22,7 @@
 	<table class="factura">
 		{% if object_list %}
 		<tr>
-			<td class="margenesTitle margenesProducto">Producto </td> 
+			<td class="margenesTitleProd">Producto </td> 
 			<td class="margenesTitle">Cantidad </td>  
 			<td class="margenesTitle">Precio </td>  
 			<td class="margenesTitle">Descuento </td>  
@@ -33,7 +33,7 @@
 		{% for factura in object_list %}
 
 		<tr>
-			<td class="margenesRow margenesProducto"> {{ factura.producto }} </td> 
+			<td class="margenesProducto"> {{ factura.producto }} </td> 
 			<td class="margenesRow"> {{ factura.cantidad }} </td> 
 			<td class="margenesRow"> {{ factura.precio }} </td> 
 			<td class="margenesRow"> {{ factura.descuento }} </td> 

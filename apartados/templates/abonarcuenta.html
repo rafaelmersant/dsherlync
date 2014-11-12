@@ -19,10 +19,10 @@
 	<table id="clientesajax" class="tableSearchCte"> </table>
 
 	<form action="" method="get" class="NoMargenNoPadding">
-			<input type="submit" class="AddItem PrintFact BCte" value="Buscar"> 
+			<input type="submit" id="idSubmitAbono" class="AddItem PrintFact BCte" value="Buscar"> 
 
 		<div> 
-			<input type="hidden" name="cliente" id="idCliente">
+			<input type="hidden" name="cliente" id="idCliente" value="{{deuda.cliente.pk}}">
 		</div> 
 	</form>
 	

@@ -9,7 +9,7 @@ class DeudaClienteAdmin(admin.ModelAdmin):
 	list_display = ['id','cliente','deuda']
 
 class AbonoClienteAdmin(admin.ModelAdmin):
-	list_display = ['id','cliente','abono','fecha']
+	list_display = ['cliente','abono','fecha','ap','estatus']
 
 
 admin.site.register(Apartado, ApartadoAdmin)

@@ -82,6 +82,17 @@ class FacturarView(View):
 
 			data = json.loads(request.body)
 
+			#Verificar que hay disponibilidad para cada producto solicitado
+			for row in data['items']:
+				cod = row['Codigo'].strip()
+				cnt = int(row['Cantidad'])
+
+				prod = Producto.objects.get(codigo=cod)
+				disp = Existencia.objects.get(producto=prod)
+				if cnt > disp.cantidad:
+					raise Exception('El producto '+ prod.descripcion + ' no tiene disponibilidad para ' + str(cnt) + ' Solo hay '+ str(disp.cantidad) + '.')
+			#****************************************************************
+
 			next_factura = Factura.objects.latest('pk').no_factura + 1
 			
 			factura = Factura()

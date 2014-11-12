@@ -24,12 +24,14 @@
 		<tr>
 			<td class="margenesTitle">No. Factura </td> 
 			<td class="margenesTitle">Total </td>  
+			<td class="margenesTitle">Ver </td>  
 		</tr>
 
 		{% for factura in object_list %}
 		<tr>
 			<td class="margenesRow"> {{ factura.factura_id }} </td> 
 			<td class="margenesRow"> {{ factura.totalgeneral|sub:factura.descuentos|floatformat:2|intcomma}} </td>  
+			<td class="margenesRow2"> <a href="/buscarfactura/?Factura={{factura.factura_id}}" class="icon-uniE601 margenesRowVer"></a>
 		</td>
 		</tr>
 		{% empty %}

@@ -33,12 +33,17 @@
 				<li> <a class="clsItemMenu" id="BtReporte" href="/reportes">Reportes</a></li>
 				<li> <a class="clsItemMenu" id="BtBFactura" href="/buscarfactura">Buscar Factura</a></li>
 				<li> <a class="clsItemMenu" id="BtAbono" href="/abonar">Abono</a></li>
-				<li> <a class="clsItemMenu" id="BtInventario" href="/inventario">Inventario</a></li>
+				
+				{% if user.is_superuser %}
 
-				<li> <a class="clsAdministrar" href="http://127.0.0.1:8000/admin">Administrar </a></li>
+					<li> <a class="clsItemMenu" id="BtInventario" href="/inventario" target="_blank">Inventario</a></li>
+
+				{% endif %}
+
+					<li> <a class="clsAdministrar" href="http://127.0.0.1:8000/admin">Administrar </a></li>
 			</ul>
 		</nav>
-
+		
 		{% block content %}
 		{% endblock content %}
 

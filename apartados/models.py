@@ -28,7 +28,11 @@ class DeudaCliente(models.Model):
 
 
 class AbonoCliente(models.Model):
+	estatus_choices = (('A','Activo'),('X','Anulado'),('C','Completado'))
 
 	cliente = models.ForeignKey(Cliente)
 	abono = models.DecimalField(max_digits=8, decimal_places=2)
 	fecha = models.DateField(auto_now_add=True)
+	ap = models.IntegerField()
+	estatus = models.CharField(max_length=1, choices=estatus_choices,
+							   default=estatus_choices[0][0])

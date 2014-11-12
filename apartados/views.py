@@ -38,9 +38,20 @@ class ApartarView(View):
 	def post(self, request, *args, **kwargs):
 		try:
 
-			total_deuda = 0
+			total_deuda = float(0)
 
 			data = json.loads(request.body)
+
+			#Verificar que hay disponibilidad para cada producto solicitado
+			for row in data['items']:
+				cod = row['Codigo'].strip()
+				cnt = int(row['Cantidad'])
+
+				prod = Producto.objects.get(codigo=cod)
+				disp = Existencia.objects.get(producto=prod)
+				if cnt > disp.cantidad:
+					raise Exception('El producto '+ prod.descripcion + ' no tiene disponibilidad para ' + str(cnt) + ' Solo hay '+ str(disp.cantidad) + '.')
+			#****************************************************************
 
 			if Apartado.objects.count() > 0:
 				next_apartado = Apartado.objects.latest('pk').no_apartado + 1
@@ -53,6 +64,8 @@ class ApartarView(View):
 			cliente = data['cliente']
 			abono = data['abono']
 
+			o_cliente = Cliente.objects.get(pk=cliente)
+
 			for item in data['items']:
 				codigo = item['Codigo'].strip()
 				cantidad = float(item['Cantidad'])
@@ -63,7 +76,7 @@ class ApartarView(View):
 				if descuento == '':
 					descuento = '0'
 
-				apartado.cliente = Cliente.objects.get(pk=cliente)
+				apartado.cliente = o_cliente
 				apartado.producto = Producto.objects.get(codigo=codigo)
 				apartado.cantidad = cantidad
 				apartado.descuento = descuento
@@ -87,15 +100,23 @@ class ApartarView(View):
 
 			if abono:
 				abonoCte = AbonoCliente()
-				abonoCte.cliente = apartado.cliente
+				abonoCte.cliente = o_cliente
 				abonoCte.abono = float(abono)
+				abonoCte.ap = apartado.no_apartado
 				abonoCte.save()
 				total_deuda = total_deuda - float(abono)
 
 			deudaCte = DeudaCliente()
-			deudaCte.cliente = Cliente.objects.get(pk=cliente)
-			deudaCte.deuda = total_deuda
-			deudaCte.save()
+
+			try:	
+				deudaCte = DeudaCliente.objects.get(cliente=o_cliente)
+				deudaCte.deuda += int(total_deuda)
+				deudaCte.save(update_fields=['deuda'])
+
+			except deudaCte.DoesNotExist:
+				deudaCte.cliente = Cliente.objects.get(pk=cliente)
+				deudaCte.deuda = total_deuda
+				deudaCte.save()
 
 			return HttpResponse(next_apartado)
 
@@ -162,26 +183,31 @@ class AbonarMontoView(View):
 			data = json.loads(request.body)
 			
 			cliente = data['cliente']
-			montoAbono = data['abono']
+			montoAbono = int(data['abono'])
 
 			o_cliente = Cliente.objects.get(pk=cliente)
 
-			abono = AbonoCliente()
-			abono.cliente = o_cliente
-			abono.abono = montoAbono
-			abono.save()
-
-			deudaCte = DeudaCliente.objects.get(cliente=abono.cliente)
+			deudaCte = DeudaCliente.objects.get(cliente=o_cliente)
+			
 			if montoAbono > deudaCte.deuda:
 				raise Exception('El monto que intenta pagar esta por encima de la deuda.')
 			else:
 				deudaCte.deuda -= montoAbono
 				deudaCte.save()
 
-			if (deudaCte.deuda - montoAbono) == 0:
-				apartados = Apartado.objects.filter(cliente=abono.cliente)
+			abono = AbonoCliente()
+			abono.cliente = o_cliente
+			abono.abono = montoAbono
+			abono.apartado = Apartado.objects.filter(cliente=o_cliente,
+													 estatus='A')[:1].no_apartado
+			abono.save()
+
+			if (deudaCte.deuda - montoAbono) <= 0:
+				apartados = Apartado.objects.filter(cliente=o_cliente)
 				apartados.estatus = 'C'
-				apartados.save()
+				apartados.save(update_fields=['estatus'])
+
+				#CREAR UNA FACTURA PARA PRODUCTOS PAGADOS COMPLETAMENTE
 
 			return HttpResponse('El abono fue realizado!')
 
