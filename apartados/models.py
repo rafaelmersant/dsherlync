@@ -12,6 +12,7 @@ class Apartado(models.Model):
 	cliente = models.ForeignKey(Cliente)
 	producto = models.ForeignKey(Producto)
 	cantidad = models.PositiveIntegerField()
+	descuento = models.IntegerField(blank=True, default=0)
 	precio = models.DecimalField(max_digits=8, decimal_places=2, blank=True)
 	fecha_vence = models.DateField(default=datetime.now()+timedelta(days=15))
 	estatus = models.CharField(max_length=1, choices=estatus_choices,

@@ -10,8 +10,8 @@ class InventarioAdmin(admin.ModelAdmin):
 	list_filter = ('fecha_entrada',)
 
 class MovimientoAdmin(admin.ModelAdmin):
-	list_display = ['id','producto','cantidad','tipo_movimiento','fecha_movimiento']
-	list_filter = ('producto',)
+	list_display = ['id','producto','cantidad','tipo_mov','fecha_movimiento']
+	list_filter = ('producto','fecha_movimiento',)
 
 class ExistenciaAdmin(admin.ModelAdmin):
 	list_display = ['id','producto','cantidad',]

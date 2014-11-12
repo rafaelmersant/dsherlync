@@ -23,10 +23,10 @@ class Movimiento(models.Model):
 
 	producto = models.ForeignKey(Producto)
 	cantidad = models.IntegerField()
-	tipo_movimiento = models.CharField(max_length=1,
+	tipo_mov = models.CharField(max_length=1,
 									   choices=tipo_mov_choices,
 									   default=tipo_mov_choices[0][0],
-									   verbose_name="Tipo Movimiento"),
+									   ),
 	fecha_movimiento = models.DateField(auto_now_add=True)
 
 

@@ -27,6 +27,7 @@ $(document).ready(function() {
 
 	if(window.location.pathname == '/apartados/'){
 		prodLS['display'] = 'displaynone';
+		sessionStorage['cliente'] = "undefined";
 		$('#idHeaderApartar').addClass(prodLS['display']);
 	}
 	else{
@@ -106,7 +107,13 @@ $('#iProd').on('keypress', function(e) {
 //PARA EJECUTAR LA FUNCION IMPRIMIR CUANDO SE HAYA DIGITADO EL MONTO A PAGAR
 $('#iPagoF').on('keypress', function(e) {
 	if (event.charCode == 13){
-		facturarImprimir();
+		if(window.location.pathname == '/apartados/'){
+			ApartarProductos();
+		}
+		else
+		{
+			facturarImprimir();
+		}
 	}
 
 });
@@ -370,7 +377,7 @@ function EventosTextBox(concepto, posicion){
 
 //FUNCION PARA ELIMINAR REGISTRO
 function EliminarReg(registroDEL){
-	$('#idItemF'+registroDEL).html('');
+	$('#idItemF'+registroDEL).remove();
 	prodLS['F' + registroDEL] = '';
 }
 //**************************************************************
@@ -401,7 +408,9 @@ function CalculaTOTALES(){
 
 	while($t > 0 )
 	{
-		valor = valor + parseInt($('#idImporte' + $t).text());
+		if ($('#idImporte'+$t).text().length > 0){
+			valor = valor + parseInt($('#idImporte' + $t).text());
+		}
 		--$t;
 	}
 
@@ -445,9 +454,14 @@ function ValidarCamposApartados(){
 	valor = true
 
 	for(j=1; j<=RegCOUNT; j++){
-		if(parseFloat($('#idImporte' + j).text()) <= 0 || $('#idImporte' + j).text() == ''){
+
+		if(parseFloat($('#idImporte' + j).text()) <= 0 ){
 			valor = false;
 		}
+	}
+
+	if(sessionStorage['cliente'] == "undefined"){
+		valor = false;
 	}
 
 	return valor;
@@ -529,9 +543,6 @@ function ClasificarFacturados(){
 			item.Descuento = Desc;
 
 			itemsfactura.push(item);
-
-			// prodLS['F' + i] =  JSON.stringify();			
-			// itemsfactura.push(JSON.parse(prodLS.getItem(prodLS.key(i-1))));
 		}
 
 		$dataFacturar.itemsfactura = itemsfactura;
@@ -547,8 +558,6 @@ function ClasificarApartados(){
 	for (i=0; i<prodLS.length; i++){
 		if(prodLS.key(i).substring(0,1) == 'A')
 			console.log('');
-			// $dataApartar.itemsapartar.push(prodLS.getItem(prodLS.key(i)));
-			// $dataApartar = $dataApartar + prodLS.getItem(prodLS.key(i)) + ',';
 	}
 }
 //**************************************************************
@@ -584,7 +593,6 @@ function facturarImprimir(e){
 		    		data = 'La factura '+ data +' se guardó con exito!';
 		    		
 		    		$('#btnImprimir').removeClass('AddItem');
-		    		// $('#btnImprimir').removeClass('PrintFact');
 		    		$('#btnImprimir').addClass('InhabilitaBoton');
 
 		    		$('#btnImprimir').attr('href','#');
@@ -607,51 +615,63 @@ function facturarImprimir(e){
 //FUNCION PARA GUARDAR PRODUCTOS APARTADOS
 function ApartarProductos(e){
 
-	if(ValidarCamposApartados()){
-		ClasificarFacturados();
-		ClasificarApartados();
-		
-		var csrftoken = getCookie('csrftoken');
+	try{
 
-		$.ajaxSetup({
-		    beforeSend: function(xhr, settings) {
-		        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-		            xhr.setRequestHeader("X-CSRFToken", csrftoken);
-		        }
-		    }
-		});
-		
-		//ENVIAR POST MEDIANTE AJAX PARA GUARDAR APARTADOS EN BASE DE DATOS
-		$.ajax({
-		    type: "POST",
-		    url: "http://127.0.0.1:8000/apartar/",
-		    data: JSON.stringify({'items': $dataFacturar.itemsfactura, 'cliente': prodLS['Cliente'], 'abono': $('#iPagoF').val()}),
-		    contentType: 'application/json; charset=utf-8',
+		if( parseFloat($('#iPagoF').val()) >= parseFloat($('#iTOTAL').text())){
+			throw "ERROR";
+		}
 
-		    success: function (data) {
-		    	 if (data >= 1){
+		if(ValidarCamposApartados()){
+				ClasificarFacturados();
+				ClasificarApartados();
 
-		    		data = 'Los registros fueron guardados con exito!';
-		    		
-		    		$('#btnApartar').removeClass('AddItem');
-		    		$('#btnApartar').addClass('InhabilitaBoton');
+				var csrftoken = getCookie('csrftoken');
 
-		    		$('#btnApartar').attr('href','#');
-		     	 	$('#iMessage').addClass('Guardado');
-		     		$('#iMessage').text(data);
-		    	}
-		    	else{
-			        $('#iMessage').text(data);
-		    	}
+				$.ajaxSetup({
+				    beforeSend: function(xhr, settings) {
+				        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+				            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+				        }
+				    }
+				});
+				
+				//ENVIAR POST MEDIANTE AJAX PARA GUARDAR APARTADOS EN BASE DE DATOS
+				$.ajax({
+				    type: "POST",
+				    url: "http://127.0.0.1:8000/apartar/",
+				    data: JSON.stringify({'items': $dataFacturar.itemsfactura, 'cliente': prodLS['Cliente'], 'abono': $('#iPagoF').val()}),
+				    contentType: 'application/json; charset=utf-8',
 
-		    }
-		});
+				    success: function (data) {
+				    	 if (data >= 1){
+
+				    		data = 'Los registros fueron guardados con exito!';
+				    		
+				    		$('#btnApartar').removeClass('AddItem');
+				    		$('#btnApartar').addClass('InhabilitaBoton');
+
+				    		$('#btnApartar').attr('href','#');
+				     	 	$('#iMessage').addClass('Guardado');
+				     		$('#iMessage').text(data);
+				    	}
+				    	else{
+					        $('#iMessage').text(data);
+				    	}
+
+				    }
+				});
+			}
+			else
+			{
+				$('#iMessage').text('Favor verificar que los campos han sido completados.').removeClass('Guardado');
+
+			}
 	}
-	else
-	{
-		$('#iMessage').text('Favor verificar que los campos han sido completados.').removeClass('Guardado');
-
+	catch(ex){
+		$('#iMessage').text('No puede realizar el pago total de lo apartado, debería ir por la opción abonar.')
 	}
+
+	
 }
 //**************************************************************
 

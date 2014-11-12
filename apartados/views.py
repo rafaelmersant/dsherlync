@@ -11,6 +11,7 @@ from clientes.models import Cliente
 from apartados.models import Apartado, DeudaCliente, AbonoCliente
 from inventarios.models import Movimiento, Existencia
 from productos.models import Producto
+from facturas.models import Factura, Detalle
 
 from .serializers import AbonoSerializer
 
@@ -53,13 +54,12 @@ class ApartarView(View):
 					raise Exception('El producto '+ prod.descripcion + ' no tiene disponibilidad para ' + str(cnt) + ' Solo hay '+ str(disp.cantidad) + '.')
 			#****************************************************************
 
+			next_apartado = 0
+
 			if Apartado.objects.count() > 0:
 				next_apartado = Apartado.objects.latest('pk').no_apartado + 1
 			else:
 				next_apartado = 1
-			
-			apartado = Apartado()
-			apartado.no_apartado = next_apartado
 			
 			cliente = data['cliente']
 			abono = data['abono']
@@ -76,6 +76,8 @@ class ApartarView(View):
 				if descuento == '':
 					descuento = '0'
 
+				apartado = Apartado()
+				apartado.no_apartado = next_apartado
 				apartado.cliente = o_cliente
 				apartado.producto = Producto.objects.get(codigo=codigo)
 				apartado.cantidad = cantidad
@@ -165,7 +167,7 @@ class AbonoListView(APIView):
 	def get(self, request, cliente=None, format=None):
 		if cliente != None:
 			o_cliente = Cliente.objects.filter(id=cliente)
-			abonos = AbonoCliente.objects.filter(cliente=o_cliente)
+			abonos = AbonoCliente.objects.filter(cliente=o_cliente,estatus='A')
 		else:
 			abonos = None
 
@@ -198,18 +200,38 @@ class AbonarMontoView(View):
 			abono = AbonoCliente()
 			abono.cliente = o_cliente
 			abono.abono = montoAbono
-			abono.apartado = Apartado.objects.filter(cliente=o_cliente,
-													 estatus='A')[:1].no_apartado
+			abono.ap = Apartado.objects.filter(cliente=o_cliente,estatus='A').latest('no_apartado').no_apartado
 			abono.save()
+			mensaje = 'El abono fue realizado!'
 
 			if (deudaCte.deuda - montoAbono) <= 0:
-				apartados = Apartado.objects.filter(cliente=o_cliente)
-				apartados.estatus = 'C'
-				apartados.save(update_fields=['estatus'])
 
 				#CREAR UNA FACTURA PARA PRODUCTOS PAGADOS COMPLETAMENTE
+				if Factura.objects.count() > 0:
+					next_factura = Factura.objects.latest('pk').no_factura + 1
+				else:
+					next_factura = 1
+		
+				factura = Factura()
+				factura.no_factura = next_factura
+				factura.save()
 
-			return HttpResponse('El abono fue realizado!')
+				for item in Apartado.objects.filter(cliente=o_cliente,estatus='A'):
+					detalle = Detalle()
+					detalle.producto = item.producto
+					detalle.cantidad = item.cantidad
+					detalle.descuento = item.descuento
+					detalle.precio = item.precio
+					detalle.factura = Factura.objects.get(no_factura=next_factura)
+					detalle.save()
+
+				AbonoCliente.objects.filter(cliente=o_cliente).update(estatus='C')
+				Apartado.objects.filter(cliente=o_cliente).update(estatus='C')
+				
+				mensaje = 'La deuda fue saldada completamente. Fue creada la factura ' + str(next_factura)
+
+
+			return HttpResponse(ii)
 
 		except Exception as e:
 			return HttpResponse(e)

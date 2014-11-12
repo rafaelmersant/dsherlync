@@ -61,6 +61,8 @@ h2{
 	float: right;
 	top: 1.5em;
 	right: 3em;
+	z-index: 1;
+	-webkit-transition: 1s;
 }
 .cerrarCte{
 	color: black;
@@ -226,6 +228,7 @@ h2{
 	background: white;
 	margin-top: -.01em;
 	width: 390px;
+	z-index: 2;
 }
 
 .idCodCte{
